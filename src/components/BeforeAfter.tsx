@@ -2,7 +2,21 @@ import { useRef, useState, useCallback } from "react";
 import carBefore from "@/assets/car-before.jpg";
 import carAfter from "@/assets/car-after.jpg";
 
-export function BeforeAfter() {
+interface BeforeAfterProps {
+  beforeSrc?: string;
+  afterSrc?: string;
+  beforeAlt?: string;
+  afterAlt?: string;
+  afterLabel?: string;
+}
+
+export function BeforeAfter({
+  beforeSrc = carBefore,
+  afterSrc = carAfter,
+  beforeAlt = "Foto amadora original do carro antes do tratamento",
+  afterAlt = "Foto profissional do carro processada pela Aspect",
+  afterLabel = "DEPOIS — ASPECT",
+}: BeforeAfterProps = {}) {
   const [pos, setPos] = useState(50);
   const ref = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
@@ -31,8 +45,8 @@ export function BeforeAfter() {
     >
       {/* After (base) */}
       <img
-        src={carAfter}
-        alt="Foto profissional do carro processada pela Aspect"
+        src={afterSrc}
+        alt={afterAlt}
         width={1280}
         height={800}
         className="absolute inset-0 h-full w-full object-cover"
@@ -43,8 +57,8 @@ export function BeforeAfter() {
         style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
       >
         <img
-          src={carBefore}
-          alt="Foto amadora original do carro antes do tratamento"
+          src={beforeSrc}
+          alt={beforeAlt}
           width={1280}
           height={800}
           className="absolute inset-0 h-full w-full object-cover"
@@ -56,7 +70,7 @@ export function BeforeAfter() {
         ANTES
       </div>
       <div className="absolute right-4 top-4 rounded-sm bg-ember px-3 py-1 font-display text-sm tracking-widest text-accent-foreground">
-        DEPOIS — ASPECT
+        {afterLabel}
       </div>
 
       {/* Slider handle */}

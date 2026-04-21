@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BeforeAfter } from "@/components/BeforeAfter";
+import { Portfolio } from "@/components/Portfolio";
 import { AspectLogo } from "@/components/AspectLogo";
 import heroBg from "@/assets/hero-bg.jpg";
 
@@ -31,6 +32,7 @@ function Index() {
       <Header />
       <Hero />
       <Comparison />
+      <Portfolio />
       <Features />
       <Process />
       <Pricing />
@@ -47,6 +49,7 @@ function Header() {
         <AspectLogo />
         <nav className="hidden items-center gap-10 text-sm uppercase tracking-widest text-muted-foreground md:flex">
           <a href="#trabalho" className="transition hover:text-foreground">Trabalho</a>
+          <a href="#portfolio" className="transition hover:text-foreground">Portfólio</a>
           <a href="#processo" className="transition hover:text-foreground">Processo</a>
           <a href="#precos" className="transition hover:text-foreground">Preços</a>
         </nav>
