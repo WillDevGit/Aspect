@@ -7,16 +7,16 @@ import heroBg from "@/assets/hero-bg.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Aspect — Fotos de carro de nível profissional" },
+      { title: "Aspect — Professional-grade car photography" },
       {
         name: "description",
         content:
-          "A Aspect transforma fotos amadoras de carros em imagens cinematográficas dignas de revista. Para concessionárias, lojistas e entusiastas.",
+          "Aspect turns amateur car photos into magazine-grade cinematic images. For dealerships, resellers and enthusiasts.",
       },
-      { property: "og:title", content: "Aspect — Fotos de carro de nível profissional" },
+      { property: "og:title", content: "Aspect — Professional-grade car photography" },
       {
         property: "og:description",
-        content: "Transforme fotos comuns de carros em imagens cinematográficas em minutos.",
+        content: "Turn ordinary car photos into cinematic images in minutes.",
       },
       { property: "og:image", content: heroBg },
       { name: "twitter:card", content: "summary_large_image" },
@@ -35,7 +35,6 @@ function Index() {
       <Portfolio />
       <Features />
       <Process />
-      <Pricing />
       <CTA />
       <Footer />
     </div>
@@ -48,16 +47,16 @@ function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between">
         <AspectLogo />
         <nav className="hidden items-center gap-10 text-sm uppercase tracking-widest text-muted-foreground md:flex">
-          <a href="#trabalho" className="transition hover:text-foreground">Trabalho</a>
-          <a href="#portfolio" className="transition hover:text-foreground">Portfólio</a>
-          <a href="#processo" className="transition hover:text-foreground">Processo</a>
-          <a href="#precos" className="transition hover:text-foreground">Preços</a>
+          <a href="#work" className="transition hover:text-foreground">Work</a>
+          <a href="#portfolio" className="transition hover:text-foreground">Portfolio</a>
+          <a href="#process" className="transition hover:text-foreground">Process</a>
+          <a href="#contact" className="transition hover:text-foreground">Contact</a>
         </nav>
         <a
-          href="#cta"
+          href="mailto:aspecttdigital@gmail.com"
           className="hidden rounded-sm border border-ember/40 bg-ember/10 px-5 py-2 text-sm font-medium uppercase tracking-widest text-ember transition hover:bg-ember hover:text-accent-foreground md:inline-block"
         >
-          Enviar fotos
+          Get in touch
         </a>
       </div>
     </header>
@@ -78,46 +77,46 @@ function Hero() {
           <div className="mb-8 flex items-center gap-3">
             <span className="h-px w-12 bg-ember" />
             <span className="font-display text-sm tracking-[0.3em] text-ember">
-              FOTOGRAFIA AUTOMOTIVA · IA
+              AUTOMOTIVE PHOTOGRAPHY · AI
             </span>
           </div>
 
           <h1 className="font-display text-6xl leading-[0.9] tracking-tight text-foreground md:text-8xl lg:text-[10rem]">
-            DA GARAGEM
+            FROM THE GARAGE
             <br />
             <span className="font-editorial text-5xl text-gradient-ember md:text-7xl lg:text-9xl">
-              à capa
+              to the cover
             </span>
             <br />
-            DE REVISTA.
+            OF A MAGAZINE.
           </h1>
 
           <p className="mt-10 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-            A Aspect pega aquela foto torta tirada no estacionamento e devolve uma
-            imagem cinematográfica que vende. Em minutos. Sem estúdio.
+            Aspect takes that crooked photo shot in the parking lot and turns it
+            into a cinematic image that sells. In minutes. No studio.
           </p>
 
           <div className="mt-12 flex flex-col gap-4 sm:flex-row">
             <a
-              href="#cta"
+              href="#portfolio"
               className="group relative overflow-hidden rounded-sm bg-ember px-8 py-4 text-center font-display text-base tracking-widest text-accent-foreground transition hover:bg-ember-glow"
             >
-              ENVIAR MINHA FOTO →
+              VIEW PORTFOLIO →
             </a>
             <a
-              href="#trabalho"
+              href="#work"
               className="rounded-sm border border-border px-8 py-4 text-center font-display text-base tracking-widest text-foreground transition hover:border-ember hover:text-ember"
             >
-              VER TRANSFORMAÇÕES
+              SEE TRANSFORMATIONS
             </a>
           </div>
 
           <div className="mt-16 flex items-center gap-8 text-sm text-muted-foreground">
-            <Stat n="12k+" label="Fotos tratadas" />
+            <Stat n="12k+" label="Photos retouched" />
             <div className="h-8 w-px bg-border" />
-            <Stat n="48h" label="Entrega média" />
+            <Stat n="2 yrs" label="In business" />
             <div className="h-8 w-px bg-border" />
-            <Stat n="320+" label="Lojas atendidas" />
+            <Stat n="320+" label="Dealerships served" />
           </div>
         </div>
       </div>
@@ -136,29 +135,29 @@ function Stat({ n, label }: { n: string; label: string }) {
 
 function Comparison() {
   return (
-    <section id="trabalho" className="border-t border-border bg-surface py-24 md:py-36">
+    <section id="work" className="border-t border-border bg-surface py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-12 grid gap-8 md:grid-cols-2 md:items-end">
           <div>
             <div className="mb-4 font-display text-sm tracking-[0.3em] text-ember">
-              ANTES / DEPOIS
+              BEFORE / AFTER
             </div>
             <h2 className="font-display text-5xl leading-none tracking-tight md:text-7xl">
-              ARRASTE.
+              DRAG.
               <br />
-              <span className="font-editorial text-gradient-ember">veja a diferença.</span>
+              <span className="font-editorial text-gradient-ember">see the difference.</span>
             </h2>
           </div>
           <p className="text-lg text-muted-foreground md:text-right">
-            Mesma foto. Mesmo carro. Tratamento profissional, fundo
-            recriado, iluminação cinematográfica e cor calibrada para venda.
+            Same photo. Same car. Professional retouching, recreated
+            background, cinematic lighting and color calibrated to sell.
           </p>
         </div>
 
         <BeforeAfter />
 
         <p className="mt-6 text-center text-xs uppercase tracking-widest text-muted-foreground">
-          Arraste o controle ⇄ para comparar
+          Drag the slider ⇄ to compare
         </p>
       </div>
     </section>
@@ -169,23 +168,23 @@ function Features() {
   const items = [
     {
       n: "01",
-      title: "Fundo cinematográfico",
-      text: "Removemos o estacionamento, a oficina, o trânsito. Inserimos cenários dignos de campanha.",
+      title: "Cinematic background",
+      text: "We remove the parking lot, the workshop, the traffic. We drop in scenes worthy of a campaign.",
     },
     {
       n: "02",
-      title: "Luz que vende",
-      text: "Reflexos na lataria, sombras controladas e color grading que valorizam cada curva.",
+      title: "Light that sells",
+      text: "Reflections on the bodywork, controlled shadows and color grading that flatter every curve.",
     },
     {
       n: "03",
-      title: "Detalhe absoluto",
-      text: "Pneus restaurados, vidros limpos, faróis brilhando. Pronto para anúncio premium.",
+      title: "Absolute detail",
+      text: "Restored tires, clean glass, glowing headlights. Ready for a premium listing.",
     },
     {
       n: "04",
-      title: "Entrega rápida",
-      text: "Em até 48 horas suas fotos voltam prontas para Instagram, OLX, Webmotors ou catálogo.",
+      title: "2 years in business",
+      text: "Two years sharpening our craft alongside dealerships and enthusiasts who demand excellence.",
     },
   ];
 
@@ -194,12 +193,12 @@ function Features() {
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-16 max-w-2xl">
           <div className="mb-4 font-display text-sm tracking-[0.3em] text-ember">
-            O QUE FAZEMOS
+            WHAT WE DO
           </div>
           <h2 className="font-display text-5xl leading-none tracking-tight md:text-7xl">
-            QUATRO PASSOS.
+            FOUR STEPS.
             <br />
-            <span className="font-editorial text-gradient-ember">um resultado.</span>
+            <span className="font-editorial text-gradient-ember">one result.</span>
           </h2>
         </div>
 
@@ -228,20 +227,20 @@ function Features() {
 
 function Process() {
   const steps = [
-    { k: "01", t: "Você envia", d: "Manda suas fotos pelo WhatsApp ou upload no site. Quantas quiser." },
-    { k: "02", t: "Nossa equipe trata", d: "IA + retoque humano. Cada imagem passa por um especialista." },
-    { k: "03", t: "Aprovação", d: "Você recebe um preview. Pede ajustes se quiser, sem custo extra." },
-    { k: "04", t: "Entrega final", d: "Arquivos em alta resolução, prontos para qualquer canal." },
+    { k: "01", t: "You email us", d: "Send your photos to our email. As many as you want." },
+    { k: "02", t: "Our team retouches", d: "AI + human polish. Every image is reviewed by a specialist." },
+    { k: "03", t: "Approval", d: "You get a preview. Request tweaks at no extra cost." },
+    { k: "04", t: "Final delivery", d: "High-resolution files, ready for any channel." },
   ];
   return (
-    <section id="processo" className="border-t border-border bg-surface py-24 md:py-36">
+    <section id="process" className="border-t border-border bg-surface py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-16 grid gap-8 md:grid-cols-2 md:items-end">
           <h2 className="font-display text-5xl leading-none tracking-tight md:text-7xl">
-            COMO FUNCIONA
+            HOW IT WORKS
           </h2>
           <p className="max-w-md text-lg text-muted-foreground md:justify-self-end">
-            Sem complicação. Sem briefing de 40 páginas. Você manda. A gente entrega.
+            No fuss. No 40-page briefing. You send. We deliver.
           </p>
         </div>
 
@@ -271,108 +270,10 @@ function Process() {
   );
 }
 
-function Pricing() {
-  const plans = [
-    {
-      name: "Single",
-      price: "R$ 29",
-      unit: "por foto",
-      desc: "Perfeito para o entusiasta que quer aquela foto especial.",
-      perks: ["Tratamento completo", "Fundo recriado", "Entrega em 48h", "1 revisão grátis"],
-      featured: false,
-    },
-    {
-      name: "Lojista",
-      price: "R$ 19",
-      unit: "por foto · pacote 20+",
-      desc: "Para quem vende carros e precisa de volume com qualidade.",
-      perks: [
-        "Tudo do plano Single",
-        "Logo da loja embutida",
-        "Entrega prioritária 24h",
-        "Revisões ilimitadas",
-        "Gestor dedicado",
-      ],
-      featured: true,
-    },
-    {
-      name: "Studio",
-      price: "Custom",
-      unit: "concessionárias",
-      desc: "Volume alto, integração via API e SLA dedicado.",
-      perks: ["Pipeline automatizado", "API e webhooks", "Brand kit personalizado", "Suporte 24/7"],
-      featured: false,
-    },
-  ];
-
-  return (
-    <section id="precos" className="border-t border-border py-24 md:py-36">
-      <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="mb-16 text-center">
-          <div className="mb-4 font-display text-sm tracking-[0.3em] text-ember">
-            PREÇOS HONESTOS
-          </div>
-          <h2 className="font-display text-5xl leading-none tracking-tight md:text-7xl">
-            ESCOLHA SEU
-            <span className="font-editorial text-gradient-ember"> ângulo.</span>
-          </h2>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          {plans.map((p) => (
-            <div
-              key={p.name}
-              className={`relative flex flex-col border p-8 transition md:p-10 ${
-                p.featured
-                  ? "border-ember bg-surface glow-ember"
-                  : "border-border hover:border-ember/40"
-              }`}
-            >
-              {p.featured && (
-                <div className="absolute -top-3 left-8 bg-ember px-3 py-1 font-display text-xs tracking-widest text-accent-foreground">
-                  MAIS PEDIDO
-                </div>
-              )}
-              <div className="font-display text-2xl tracking-widest text-muted-foreground">
-                {p.name.toUpperCase()}
-              </div>
-              <div className="mt-6 flex items-baseline gap-2">
-                <span className="font-display text-6xl text-foreground">{p.price}</span>
-              </div>
-              <div className="mt-1 text-sm text-muted-foreground">{p.unit}</div>
-              <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{p.desc}</p>
-
-              <ul className="mt-8 space-y-3 text-sm">
-                {p.perks.map((perk) => (
-                  <li key={perk} className="flex items-start gap-3">
-                    <span className="mt-1.5 inline-block h-1 w-3 flex-shrink-0 bg-ember" />
-                    <span className="text-foreground">{perk}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <a
-                href="#cta"
-                className={`mt-10 block rounded-sm py-3 text-center font-display text-sm tracking-widest transition ${
-                  p.featured
-                    ? "bg-ember text-accent-foreground hover:bg-ember-glow"
-                    : "border border-border text-foreground hover:border-ember hover:text-ember"
-                }`}
-              >
-                COMEÇAR
-              </a>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function CTA() {
   return (
     <section
-      id="cta"
+      id="contact"
       className="relative grain overflow-hidden border-t border-border py-24 md:py-36"
     >
       <div
@@ -383,27 +284,25 @@ function CTA() {
 
       <div className="relative mx-auto max-w-4xl px-6 text-center md:px-12">
         <h2 className="font-display text-6xl leading-[0.9] tracking-tight md:text-8xl">
-          MANDA A FOTO.
+          LIKE WHAT YOU SEE?
           <br />
-          <span className="font-editorial text-gradient-ember">a gente faz mágica.</span>
+          <span className="font-editorial text-gradient-ember">let's talk.</span>
         </h2>
         <p className="mx-auto mt-8 max-w-xl text-lg text-muted-foreground">
-          Primeira foto por nossa conta. Você só paga se amar o resultado.
+          This is our portfolio. Drop us a line and we'll put together a quote
+          tailored to your fleet, lot or personal collection.
         </p>
         <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
-            href="https://wa.me/5511999999999"
+            href="mailto:aspecttdigital@gmail.com"
             className="rounded-sm bg-ember px-10 py-4 font-display text-base tracking-widest text-accent-foreground transition hover:bg-ember-glow"
           >
-            ENVIAR PELO WHATSAPP
-          </a>
-          <a
-            href="mailto:ola@aspect.studio"
-            className="rounded-sm border border-border px-10 py-4 font-display text-base tracking-widest transition hover:border-ember hover:text-ember"
-          >
-            FALAR COM TIME
+            EMAIL US →
           </a>
         </div>
+        <p className="mt-6 font-display text-sm tracking-[0.3em] text-muted-foreground">
+          aspecttdigital@gmail.com
+        </p>
       </div>
     </section>
   );
@@ -415,12 +314,12 @@ function Footer() {
       <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-6 md:flex-row md:items-center md:px-12">
         <AspectLogo />
         <p className="text-xs uppercase tracking-widest text-muted-foreground">
-          © {new Date().getFullYear()} Aspect Studio · Fotografia automotiva
+          © {new Date().getFullYear()} Aspect Studio · Automotive photography
         </p>
         <div className="flex gap-6 text-xs uppercase tracking-widest text-muted-foreground">
           <a href="#" className="transition hover:text-ember">Instagram</a>
           <a href="#" className="transition hover:text-ember">Behance</a>
-          <a href="#" className="transition hover:text-ember">Contato</a>
+          <a href="mailto:aspecttdigital@gmail.com" className="transition hover:text-ember">Contact</a>
         </div>
       </div>
     </footer>
