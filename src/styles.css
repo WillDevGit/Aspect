@@ -92,7 +92,12 @@
   --destructive-foreground: oklch(0.97 0.01 80);
   --border: oklch(0.25 0.01 60 / 60%);
   --input: oklch(0.22 0.01 60);
-  --ring: oklch(0.7 0.2 45);
+  --ring: oklch(0.6 0.24 305);
+  /* Override accent + ember with purple palette */
+  --accent: oklch(0.6 0.24 305);
+  --accent-foreground: oklch(0.98 0.005 305);
+  --ember: oklch(0.62 0.25 305);
+  --ember-glow: oklch(0.72 0.22 315);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -173,7 +178,7 @@
   }
 
   .glow-ember {
-    box-shadow: 0 0 60px -10px oklch(0.72 0.21 45 / 0.5);
+    box-shadow: 0 0 60px -10px oklch(0.62 0.25 305 / 0.5);
   }
 
   .grain::after {
