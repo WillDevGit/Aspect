@@ -6,10 +6,8 @@ import sedanBefore from "@/assets/portfolio/sedan-before.jpg";
 import sedanAfter from "@/assets/portfolio/sedan-after.jpg";
 import sportBefore from "@/assets/portfolio/sport-before.jpg";
 import sportAfter from "@/assets/portfolio/sport-after.jpg";
-import classicBefore from "@/assets/portfolio/classic-before.jpg";
-import classicAfter from "@/assets/portfolio/classic-after.jpg";
 
-type Category = "suv" | "sedan" | "esportivo" | "classico";
+type Category = "suv" | "sedan" | "sport";
 
 interface Item {
   key: Category;
@@ -24,34 +22,26 @@ const items: Item[] = [
   {
     key: "suv",
     label: "SUV",
-    model: "SUV familiar branco",
-    scene: "Showroom Aspect · palco principal",
+    model: "White family SUV",
+    scene: "Aspect Showroom · main stage",
     before: suvBefore,
     after: suvAfter,
   },
   {
     key: "sedan",
     label: "Sedan",
-    model: "Sedan executivo prata",
-    scene: "Showroom Aspect · luz cênica",
+    model: "Silver executive sedan",
+    scene: "Aspect Showroom · scenic lighting",
     before: sedanBefore,
     after: sedanAfter,
   },
   {
-    key: "esportivo",
-    label: "Esportivo",
-    model: "Esportivo vermelho",
-    scene: "Showroom Aspect · spot dramático",
+    key: "sport",
+    label: "Sport",
+    model: "Red sports car",
+    scene: "Aspect Showroom · dramatic spotlight",
     before: sportBefore,
     after: sportAfter,
-  },
-  {
-    key: "classico",
-    label: "Clássico",
-    model: "Coupé clássico anos 60",
-    scene: "Showroom Aspect · vitrine premium",
-    before: classicBefore,
-    after: classicAfter,
   },
 ];
 
@@ -68,20 +58,20 @@ export function Portfolio() {
         <div className="mb-12 grid gap-8 md:grid-cols-2 md:items-end">
           <div>
             <div className="mb-4 font-display text-sm tracking-[0.3em] text-ember">
-              PORTFÓLIO
+              PORTFOLIO
             </div>
             <h2 className="font-display text-5xl leading-none tracking-tight md:text-7xl">
-              QUALQUER CARRO.
+              ANY CAR.
               <br />
               <span className="font-editorial text-gradient-ember">
-                qualquer cenário.
+                any scene.
               </span>
             </h2>
           </div>
           <p className="text-lg text-muted-foreground md:text-right">
-            De picapes empoeiradas a clássicos de coleção. Cada projeto recebe
-            tratamento sob medida, com cenário e iluminação que combinam com a
-            personalidade do veículo.
+            From dusty pickups to collector classics. Every project gets
+            tailored treatment, with scenery and lighting that match the
+            personality of the vehicle.
           </p>
         </div>
 
@@ -110,27 +100,27 @@ export function Portfolio() {
             key={current.key}
             beforeSrc={current.before}
             afterSrc={current.after}
-            beforeAlt={`${current.model} antes do tratamento Aspect`}
-            afterAlt={`${current.model} após tratamento Aspect`}
-            afterLabel="DEPOIS — ASPECT"
+            beforeAlt={`${current.model} before Aspect treatment`}
+            afterAlt={`${current.model} after Aspect treatment`}
+            afterLabel="AFTER — ASPECT"
           />
 
           <aside className="flex flex-col justify-between gap-8 border border-border bg-surface p-8 lg:max-w-xs">
             <div>
               <div className="font-display text-xs tracking-[0.3em] text-ember">
-                CATEGORIA
+                CATEGORY
               </div>
               <div className="mt-2 font-display text-3xl tracking-wide text-foreground">
                 {current.label}
               </div>
               <div className="mt-6 font-display text-xs tracking-[0.3em] text-ember">
-                MODELO
+                MODEL
               </div>
               <div className="mt-2 text-base text-foreground">
                 {current.model}
               </div>
               <div className="mt-6 font-display text-xs tracking-[0.3em] text-ember">
-                CENÁRIO
+                SCENE
               </div>
               <div className="mt-2 text-base text-foreground">
                 {current.scene}
@@ -148,11 +138,11 @@ export function Portfolio() {
                         ? "border-ember"
                         : "border-border hover:border-ember/60"
                     }`}
-                    aria-label={`Ver ${it.label}`}
+                    aria-label={`View ${it.label}`}
                   >
                     <img
                       src={it.after}
-                      alt={`Miniatura ${it.label}`}
+                      alt={`${it.label} thumbnail`}
                       width={320}
                       height={240}
                       loading="lazy"
@@ -171,7 +161,7 @@ export function Portfolio() {
         </div>
 
         <p className="mt-6 text-center text-xs uppercase tracking-widest text-muted-foreground">
-          Selecione uma categoria · arraste o controle ⇄ para comparar
+          Select a category · drag the slider ⇄ to compare
         </p>
       </div>
     </section>
