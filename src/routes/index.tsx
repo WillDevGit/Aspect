@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { BeforeAfter } from "@/components/BeforeAfter";
 import { Portfolio } from "@/components/Portfolio";
 import { AspectLogo } from "@/components/AspectLogo";
+import { useReveal } from "@/hooks/use-reveal";
 import heroBg from "@/assets/hero-bg.jpg";
 
 export const Route = createFileRoute("/")({
@@ -31,6 +33,7 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <Hero />
+      <Marquee />
       <Comparison />
       <Portfolio />
       <Features />
@@ -64,11 +67,21 @@ function Header() {
 }
 
 function Hero() {
+  const [scrollY, setScrollY] = useState(0);
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <section className="relative grain min-h-screen overflow-hidden">
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-40"
-        style={{ backgroundImage: `url(${heroBg})` }}
+        className="absolute inset-0 bg-cover bg-center opacity-40 animate-slow-zoom will-change-transform"
+        style={{
+          backgroundImage: `url(${heroBg})`,
+          transform: `translate3d(0, ${scrollY * 0.3}px, 0) scale(1.1)`,
+        }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
 
@@ -84,7 +97,7 @@ function Hero() {
           <h1 className="font-display text-6xl leading-[0.9] tracking-tight text-foreground md:text-8xl lg:text-[10rem]">
             FROM THE GARAGE
             <br />
-            <span className="font-editorial text-5xl text-gradient-ember md:text-7xl lg:text-9xl">
+            <span className="font-editorial text-5xl text-gradient-animated md:text-7xl lg:text-9xl">
               to the cover
             </span>
             <br />
@@ -133,11 +146,38 @@ function Stat({ n, label }: { n: string; label: string }) {
   );
 }
 
-function Comparison() {
+function Marquee() {
+  const words = [
+    "CINEMATIC",
+    "DEALERSHIP-READY",
+    "COVER-WORTHY",
+    "PIXEL PERFECT",
+    "STUDIO QUALITY",
+    "SHOWROOM STAGE",
+  ];
+  const items = [...words, ...words];
   return (
-    <section id="work" className="border-t border-border bg-surface py-24 md:py-36">
+    <div className="relative overflow-hidden border-y border-border bg-background py-6">
+      <div className="flex w-max animate-marquee gap-12 whitespace-nowrap">
+        {items.map((w, i) => (
+          <span
+            key={i}
+            className="font-display text-3xl tracking-[0.3em] text-muted-foreground/40 md:text-5xl"
+          >
+            {w} <span className="text-ember">✦</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Comparison() {
+  const ref = useReveal<HTMLElement>();
+  return (
+    <section ref={ref} id="work" className="border-t border-border bg-surface py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="mb-12 grid gap-8 md:grid-cols-2 md:items-end">
+        <div className="mb-12 grid gap-8 md:grid-cols-2 md:items-end reveal">
           <div>
             <div className="mb-4 font-display text-sm tracking-[0.3em] text-ember">
               BEFORE / AFTER
@@ -145,7 +185,7 @@ function Comparison() {
             <h2 className="font-display text-5xl leading-none tracking-tight md:text-7xl">
               DRAG.
               <br />
-              <span className="font-editorial text-gradient-ember">see the difference.</span>
+              <span className="font-editorial text-gradient-animated">see the difference.</span>
             </h2>
           </div>
           <p className="text-lg text-muted-foreground md:text-right">
@@ -154,9 +194,11 @@ function Comparison() {
           </p>
         </div>
 
-        <BeforeAfter />
+        <div className="reveal reveal-delay-2">
+          <BeforeAfter />
+        </div>
 
-        <p className="mt-6 text-center text-xs uppercase tracking-widest text-muted-foreground">
+        <p className="reveal reveal-delay-3 mt-6 text-center text-xs uppercase tracking-widest text-muted-foreground">
           Drag the slider ⇄ to compare
         </p>
       </div>
@@ -165,6 +207,7 @@ function Comparison() {
 }
 
 function Features() {
+  const ref = useReveal<HTMLElement>();
   const items = [
     {
       n: "01",
@@ -189,26 +232,26 @@ function Features() {
   ];
 
   return (
-    <section className="border-t border-border py-24 md:py-36">
+    <section ref={ref} className="border-t border-border py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="mb-16 max-w-2xl">
+        <div className="mb-16 max-w-2xl reveal">
           <div className="mb-4 font-display text-sm tracking-[0.3em] text-ember">
             WHAT WE DO
           </div>
           <h2 className="font-display text-5xl leading-none tracking-tight md:text-7xl">
             FOUR STEPS.
             <br />
-            <span className="font-editorial text-gradient-ember">one result.</span>
+            <span className="font-editorial text-gradient-animated">one result.</span>
           </h2>
         </div>
 
         <div className="grid gap-px bg-border md:grid-cols-2 lg:grid-cols-4">
-          {items.map((it) => (
+          {items.map((it, i) => (
             <div
               key={it.n}
-              className="group relative bg-background p-8 transition hover:bg-surface md:p-10"
+              className={`group relative bg-background p-8 transition hover:-translate-y-1 hover:bg-surface md:p-10 reveal reveal-delay-${(i % 4) + 1}`}
             >
-              <div className="font-editorial text-6xl text-ember/30 transition group-hover:text-ember">
+              <div className="font-editorial text-6xl text-ember/30 transition duration-500 group-hover:scale-110 group-hover:text-ember">
                 {it.n}
               </div>
               <h3 className="mt-6 font-display text-2xl tracking-wide text-foreground">
@@ -226,6 +269,7 @@ function Features() {
 }
 
 function Process() {
+  const ref = useReveal<HTMLElement>();
   const steps = [
     { k: "01", t: "You email us", d: "Send your photos to our email. As many as you want." },
     { k: "02", t: "Our team retouches", d: "AI + human polish. Every image is reviewed by a specialist." },
@@ -233,9 +277,9 @@ function Process() {
     { k: "04", t: "Final delivery", d: "High-resolution files, ready for any channel." },
   ];
   return (
-    <section id="process" className="border-t border-border bg-surface py-24 md:py-36">
+    <section ref={ref} id="process" className="border-t border-border bg-surface py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="mb-16 grid gap-8 md:grid-cols-2 md:items-end">
+        <div className="mb-16 grid gap-8 md:grid-cols-2 md:items-end reveal">
           <h2 className="font-display text-5xl leading-none tracking-tight md:text-7xl">
             HOW IT WORKS
           </h2>
@@ -245,12 +289,12 @@ function Process() {
         </div>
 
         <div className="space-y-px">
-          {steps.map((s) => (
+          {steps.map((s, i) => (
             <div
               key={s.k}
-              className="group grid items-center gap-6 border-b border-border py-8 transition hover:bg-background md:grid-cols-12 md:gap-12 md:px-6"
+              className={`group grid items-center gap-6 border-b border-border py-8 transition hover:bg-background md:grid-cols-12 md:gap-12 md:px-6 reveal reveal-delay-${(i % 4) + 1}`}
             >
-              <div className="font-display text-5xl text-ember md:col-span-2 md:text-6xl">
+              <div className="font-display text-5xl text-ember transition-transform duration-500 group-hover:translate-x-2 md:col-span-2 md:text-6xl">
                 {s.k}
               </div>
               <h3 className="font-display text-3xl tracking-wide text-foreground md:col-span-3 md:text-4xl">
@@ -259,7 +303,7 @@ function Process() {
               <p className="text-base text-muted-foreground md:col-span-6 md:text-lg">
                 {s.d}
               </p>
-              <div className="hidden text-ember opacity-0 transition group-hover:opacity-100 md:col-span-1 md:block md:justify-self-end">
+              <div className="hidden text-ember opacity-0 transition duration-500 group-hover:translate-x-2 group-hover:opacity-100 md:col-span-1 md:block md:justify-self-end">
                 →
               </div>
             </div>
@@ -271,22 +315,24 @@ function Process() {
 }
 
 function CTA() {
+  const ref = useReveal<HTMLElement>();
   return (
     <section
+      ref={ref}
       id="contact"
       className="relative grain overflow-hidden border-t border-border py-24 md:py-36"
     >
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-25"
+        className="absolute inset-0 bg-cover bg-center opacity-25 animate-slow-zoom"
         style={{ backgroundImage: `url(${heroBg})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
 
-      <div className="relative mx-auto max-w-4xl px-6 text-center md:px-12">
+      <div className="relative mx-auto max-w-4xl px-6 text-center md:px-12 reveal">
         <h2 className="font-display text-6xl leading-[0.9] tracking-tight md:text-8xl">
           LIKE WHAT YOU SEE?
           <br />
-          <span className="font-editorial text-gradient-ember">let's talk.</span>
+          <span className="font-editorial text-gradient-animated">let's talk.</span>
         </h2>
         <p className="mx-auto mt-8 max-w-xl text-lg text-muted-foreground">
           This is our portfolio. Drop us a line and we'll put together a quote
@@ -295,9 +341,10 @@ function CTA() {
         <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
             href="mailto:aspecttdigital@gmail.com"
-            className="rounded-sm bg-ember px-10 py-4 font-display text-base tracking-widest text-accent-foreground transition hover:bg-ember-glow"
+            className="group relative overflow-hidden rounded-sm bg-ember px-10 py-4 font-display text-base tracking-widest text-accent-foreground transition hover:scale-105 hover:bg-ember-glow"
           >
-            EMAIL US →
+            <span className="relative z-10">EMAIL US →</span>
+            <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
           </a>
         </div>
         <p className="mt-6 font-display text-sm tracking-[0.3em] text-muted-foreground">
