@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { BeforeAfter } from "@/components/BeforeAfter";
 import { Portfolio } from "@/components/Portfolio";
 import { AspectLogo } from "@/components/AspectLogo";
+import { useReveal } from "@/hooks/use-reveal";
 import heroBg from "@/assets/hero-bg.jpg";
 
 export const Route = createFileRoute("/")({
@@ -31,6 +33,7 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <Hero />
+      <Marquee />
       <Comparison />
       <Portfolio />
       <Features />
@@ -64,11 +67,21 @@ function Header() {
 }
 
 function Hero() {
+  const [scrollY, setScrollY] = useState(0);
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <section className="relative grain min-h-screen overflow-hidden">
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-40"
-        style={{ backgroundImage: `url(${heroBg})` }}
+        className="absolute inset-0 bg-cover bg-center opacity-40 animate-slow-zoom will-change-transform"
+        style={{
+          backgroundImage: `url(${heroBg})`,
+          transform: `translate3d(0, ${scrollY * 0.3}px, 0) scale(1.1)`,
+        }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
 
@@ -84,7 +97,7 @@ function Hero() {
           <h1 className="font-display text-6xl leading-[0.9] tracking-tight text-foreground md:text-8xl lg:text-[10rem]">
             FROM THE GARAGE
             <br />
-            <span className="font-editorial text-5xl text-gradient-ember md:text-7xl lg:text-9xl">
+            <span className="font-editorial text-5xl text-gradient-animated md:text-7xl lg:text-9xl">
               to the cover
             </span>
             <br />
