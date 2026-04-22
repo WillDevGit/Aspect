@@ -13,9 +13,9 @@ interface BeforeAfterProps {
 export function BeforeAfter({
   beforeSrc = carBefore,
   afterSrc = carAfter,
-  beforeAlt = "Foto amadora original do carro antes do tratamento",
-  afterAlt = "Foto profissional do carro processada pela Aspect",
-  afterLabel = "DEPOIS — ASPECT",
+  beforeAlt = "Amateur original photo of the car before treatment",
+  afterAlt = "Professional car photo processed by Aspect",
+  afterLabel = "AFTER — ASPECT",
 }: BeforeAfterProps = {}) {
   const [pos, setPos] = useState(50);
   const ref = useRef<HTMLDivElement>(null);
@@ -67,7 +67,7 @@ export function BeforeAfter({
 
       {/* Labels */}
       <div className="absolute left-4 top-4 rounded-sm bg-background/80 px-3 py-1 font-display text-sm tracking-widest text-muted-foreground backdrop-blur-sm">
-        ANTES
+        BEFORE
       </div>
       <div className="absolute right-4 top-4 rounded-sm bg-ember px-3 py-1 font-display text-sm tracking-widest text-accent-foreground">
         {afterLabel}
