@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BeforeAfter } from "@/components/BeforeAfter";
+import { useReveal } from "@/hooks/use-reveal";
 import suvBefore from "@/assets/portfolio/suv-before.jpg";
 import suvAfter from "@/assets/portfolio/suv-after.jpg";
 import sedanBefore from "@/assets/portfolio/sedan-before.jpg";
@@ -48,14 +49,16 @@ const items: Item[] = [
 export function Portfolio() {
   const [active, setActive] = useState<Category>("suv");
   const current = items.find((i) => i.key === active) ?? items[0];
+  const ref = useReveal<HTMLElement>();
 
   return (
     <section
+      ref={ref}
       id="portfolio"
       className="border-t border-border bg-background py-24 md:py-36"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="mb-12 grid gap-8 md:grid-cols-2 md:items-end">
+        <div className="mb-12 grid gap-8 md:grid-cols-2 md:items-end reveal">
           <div>
             <div className="mb-4 font-display text-sm tracking-[0.3em] text-ember">
               PORTFOLIO
@@ -63,7 +66,7 @@ export function Portfolio() {
             <h2 className="font-display text-5xl leading-none tracking-tight md:text-7xl">
               ANY CAR.
               <br />
-              <span className="font-editorial text-gradient-ember">
+              <span className="font-editorial text-gradient-animated">
                 any scene.
               </span>
             </h2>
@@ -76,16 +79,16 @@ export function Portfolio() {
         </div>
 
         {/* Filter tabs */}
-        <div className="mb-10 flex flex-wrap gap-2 md:gap-3">
+        <div className="mb-10 flex flex-wrap gap-2 md:gap-3 reveal reveal-delay-1">
           {items.map((it) => {
             const isActive = it.key === active;
             return (
               <button
                 key={it.key}
                 onClick={() => setActive(it.key)}
-                className={`rounded-sm border px-5 py-3 font-display text-sm tracking-widest transition ${
+                className={`rounded-sm border px-5 py-3 font-display text-sm tracking-widest transition hover:-translate-y-0.5 ${
                   isActive
-                    ? "border-ember bg-ember text-accent-foreground"
+                    ? "border-ember bg-ember text-accent-foreground shadow-[0_0_20px_oklch(0.62_0.25_305_/_0.5)]"
                     : "border-border text-muted-foreground hover:border-ember/60 hover:text-foreground"
                 }`}
               >
@@ -95,7 +98,7 @@ export function Portfolio() {
           })}
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start">
+        <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start reveal reveal-delay-2">
           <BeforeAfter
             key={current.key}
             beforeSrc={current.before}
@@ -105,7 +108,7 @@ export function Portfolio() {
             afterLabel="AFTER — ASPECT"
           />
 
-          <aside className="flex flex-col justify-between gap-8 border border-border bg-surface p-8 lg:max-w-xs">
+          <aside key={`info-${current.key}`} className="flex flex-col justify-between gap-8 border border-border bg-surface p-8 lg:max-w-xs animate-float-up">
             <div>
               <div className="font-display text-xs tracking-[0.3em] text-ember">
                 CATEGORY
