@@ -342,6 +342,7 @@ function CTA() {
         style={{ backgroundImage: `url(${heroBg})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
+      <Particles count={18} />
 
       <div className="relative mx-auto max-w-4xl px-6 text-center md:px-12 reveal">
         <h2 className="font-display text-6xl leading-[0.9] tracking-tight md:text-8xl">
@@ -354,13 +355,13 @@ function CTA() {
           tailored to your fleet, lot or personal collection.
         </p>
         <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <a
+          <MagneticButton
             href="mailto:aspecttdigital@gmail.com"
-            className="group relative overflow-hidden rounded-sm bg-ember px-10 py-4 font-display text-base tracking-widest text-accent-foreground transition hover:scale-105 hover:bg-ember-glow"
+            className="group relative overflow-hidden rounded-sm bg-ember px-10 py-5 font-display text-base tracking-widest text-accent-foreground animate-cta-pulse hover:bg-ember-glow"
           >
             <span className="relative z-10">EMAIL US →</span>
             <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-          </a>
+          </MagneticButton>
         </div>
         <p className="mt-6 font-display text-sm tracking-[0.3em] text-muted-foreground">
           aspecttdigital@gmail.com
