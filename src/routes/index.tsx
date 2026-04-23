@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { BeforeAfter } from "@/components/BeforeAfter";
 import { Portfolio } from "@/components/Portfolio";
 import { AspectLogo } from "@/components/AspectLogo";
+import { Particles } from "@/components/Particles";
+import { MagneticButton } from "@/components/MagneticButton";
 import { useReveal } from "@/hooks/use-reveal";
 import heroBg from "@/assets/hero-bg.jpg";
 
