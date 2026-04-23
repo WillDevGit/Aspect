@@ -180,45 +180,16 @@ function Hero() {
           </div>
         </div>
 
-        {/* Stats glass card — bottom right */}
-        <div className="md:col-span-12 flex items-end justify-end">
-          <div
-            className="word-blast w-full max-w-xl rounded-2xl border border-white/10 bg-black/55 px-6 py-5 backdrop-blur-md shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]"
-            style={{ animationDelay: "1.45s" }}
-          >
-            <div className="grid grid-cols-3 divide-x divide-white/10">
-              <StatCard
-                value="3X"
-                label="More views"
-                icon={
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" />
-                    <path d="M19 14l.7 2.1L22 17l-2.3.9L19 20l-.7-2.1L16 17l2.3-.9L19 14z" />
-                  </svg>
-                }
-              />
-              <StatCard
-                value="2.7X"
-                label="Faster sales"
-                icon={
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 17l6-6 4 4 8-8" />
-                    <path d="M14 7h7v7" />
-                  </svg>
-                }
-              />
-              <StatCard
-                value="100%"
-                label="Pro quality"
-                icon={
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
-                    <path d="M12 2l9 5v6c0 5-4 8-9 9-5-1-9-4-9-9V7l9-5z" />
-                    <path d="M9 12l2 2 4-4" strokeLinecap="round" />
-                  </svg>
-                }
-              />
-            </div>
-          </div>
+        {/* Inline stats — no card, no block. Sits as text on the seamless background. */}
+        <div
+          className="md:col-span-7 word-blast mt-12 flex flex-wrap gap-x-10 gap-y-6"
+          style={{ animationDelay: "1.45s" }}
+        >
+          <InlineStat value="3X" label="More views" />
+          <span className="hidden h-10 w-px bg-white/15 sm:block" />
+          <InlineStat value="2.7X" label="Faster sales" />
+          <span className="hidden h-10 w-px bg-white/15 sm:block" />
+          <InlineStat value="100%" label="Pro quality" />
         </div>
       </div>
 
