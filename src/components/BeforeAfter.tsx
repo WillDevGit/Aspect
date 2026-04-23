@@ -78,9 +78,14 @@ export function BeforeAfter({
 
       {/* Slider handle */}
       <div
-        className="absolute top-0 h-full w-px bg-ember shadow-[0_0_12px_oklch(0.62_0.25_305_/_0.8)]"
+        className="absolute top-0 h-full w-px bg-ember shadow-[0_0_24px_oklch(0.72_0.22_315_/_0.9)]"
         style={{ left: `${pos}%` }}
       >
+        {/* Light flash trailing the divider */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 -left-12 h-full w-24 bg-gradient-to-r from-transparent via-white/25 to-transparent blur-md"
+        />
         <div className={`absolute top-1/2 left-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-ember bg-background shadow-lg transition-shadow ${hasInteracted ? "" : "animate-hint-drag"}`}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-ember">
             <path d="M8 6L2 12l6 6M16 6l6 6-6 6" />

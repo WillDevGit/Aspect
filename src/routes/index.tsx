@@ -70,24 +70,51 @@ function Header() {
 
 function Hero() {
   const [scrollY, setScrollY] = useState(0);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
+    const onMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      setMouse({ x, y });
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("mousemove", onMove);
+    };
   }, []);
 
   return (
-    <section className="relative grain min-h-screen overflow-hidden">
+    <section className="relative grain min-h-screen overflow-hidden bg-black hero-enter">
+      {/* Cinematic car plate with rim-light + parallax */}
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-40 animate-slow-zoom will-change-transform"
+        className="absolute inset-0 will-change-transform"
         style={{
-          backgroundImage: `url(${heroBg})`,
-          transform: `translate3d(0, ${scrollY * 0.3}px, 0) scale(1.1)`,
+          transform: `translate3d(${mouse.x * -18}px, ${scrollY * 0.3 + mouse.y * -12}px, 0)`,
         }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,oklch(0.62_0.25_305_/_0.25),transparent_60%),radial-gradient(ellipse_at_80%_80%,oklch(0.72_0.22_315_/_0.18),transparent_55%)]" />
-      <Particles count={30} />
+      >
+        <div
+          className="absolute inset-0 bg-cover bg-center animate-slow-zoom"
+          style={{
+            backgroundImage: `url(${heroBg})`,
+            filter: "contrast(1.25) saturate(1.15) brightness(0.78)",
+          }}
+        />
+        {/* Rim light from above-right */}
+        <div className="absolute inset-0 mix-blend-screen bg-[radial-gradient(ellipse_at_75%_15%,oklch(0.85_0.18_315_/_0.35),transparent_55%)]" />
+        {/* Edge purple glow */}
+        <div className="absolute inset-0 mix-blend-screen bg-[radial-gradient(ellipse_at_20%_85%,oklch(0.55_0.28_300_/_0.3),transparent_60%)]" />
+      </div>
+
+      {/* Deep black floor + top fade */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/55 to-black" />
+      {/* Soft vignette */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.85)_100%)]" />
+      {/* Subtle haze drift */}
+      <div className="absolute inset-0 opacity-50 animate-haze bg-[radial-gradient(ellipse_at_30%_40%,oklch(0.62_0.25_305_/_0.18),transparent_55%),radial-gradient(ellipse_at_80%_70%,oklch(0.72_0.22_315_/_0.12),transparent_55%)]" />
+      <Particles count={26} />
       <div className="beam-sweep" />
 
       <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 pt-32 pb-20 md:px-12">
@@ -99,28 +126,30 @@ function Hero() {
             </span>
           </div>
 
-          <h1 className="font-display text-6xl leading-[0.9] tracking-tight text-foreground md:text-8xl lg:text-[9rem]">
-            <span className="word-blast" style={{ animationDelay: "0.15s" }}>SELL&nbsp;</span>
-            <span className="word-blast text-gradient-animated" style={{ animationDelay: "0.3s" }}>MORE</span>
-            <span className="word-blast" style={{ animationDelay: "0.45s" }}>&nbsp;CARS,</span>
+          <h1 className="font-display text-6xl leading-[0.9] tracking-tight text-foreground md:text-8xl lg:text-[8.5rem] [text-shadow:0_2px_40px_rgba(0,0,0,0.6)]">
+            <span className="word-overshoot inline-block" style={{ animationDelay: "0.15s" }}>Make&nbsp;</span>
+            <span className="word-overshoot inline-block" style={{ animationDelay: "0.28s" }}>your&nbsp;</span>
+            <span className="word-overshoot inline-block" style={{ animationDelay: "0.41s" }}>car</span>
             <br />
-            <span className="word-blast font-editorial text-5xl text-gradient-animated md:text-7xl lg:text-[8rem]" style={{ animationDelay: "0.65s" }}>
-              instantly.
+            <span className="word-overshoot inline-block" style={{ animationDelay: "0.56s" }}>impossible&nbsp;</span>
+            <span className="word-overshoot inline-block" style={{ animationDelay: "0.7s" }}>to&nbsp;</span>
+            <span
+              className="word-overshoot inline-block font-editorial text-gradient-animated [filter:drop-shadow(0_0_28px_oklch(0.72_0.22_315_/_0.55))]"
+              style={{ animationDelay: "0.86s" }}
+            >
+              ignore.
             </span>
-            <br />
-            <span className="word-blast" style={{ animationDelay: "0.85s" }}>LOOK&nbsp;</span>
-            <span className="word-blast text-gradient-animated" style={{ animationDelay: "1s" }}>PROFESSIONAL.</span>
           </h1>
 
           <p
             className="mt-10 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl word-blast"
-            style={{ animationDelay: "1.2s" }}
+            style={{ animationDelay: "1.1s" }}
           >
             That crooked photo from the parking lot? We turn it into a
             magazine-cover image that <span className="text-foreground font-medium">moves metal</span>. In minutes. No studio.
           </p>
 
-          <div className="mt-12 flex flex-col gap-4 sm:flex-row word-blast" style={{ animationDelay: "1.4s" }}>
+          <div className="mt-12 flex flex-col gap-4 sm:flex-row word-blast" style={{ animationDelay: "1.3s" }}>
             <MagneticButton
               href="#contact"
               className="group relative overflow-hidden rounded-sm bg-ember px-10 py-5 text-center font-display text-base tracking-widest text-accent-foreground animate-cta-pulse hover:bg-ember-glow"
@@ -138,7 +167,7 @@ function Hero() {
 
           <div
             className="mt-16 flex items-center gap-8 text-sm text-muted-foreground word-blast"
-            style={{ animationDelay: "1.6s" }}
+            style={{ animationDelay: "1.5s" }}
           >
             <Stat n="12k+" label="Photos retouched" />
             <div className="h-8 w-px bg-border" />

@@ -288,6 +288,35 @@
 }
 .animate-cta-pulse { animation: cta-pulse 2.4s ease-in-out infinite; }
 
+/* === Hero entry: blur → sharp + scale-down === */
+@keyframes hero-enter {
+  0% { opacity: 0; transform: scale(1.06); filter: blur(14px) brightness(0.6); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0) brightness(1); }
+}
+.hero-enter {
+  animation: hero-enter 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* === Headline: word with slight overshoot === */
+@keyframes word-overshoot {
+  0% { opacity: 0; transform: translateY(48px); filter: blur(10px); }
+  60% { opacity: 1; transform: translateY(-6px); filter: blur(0); }
+  80% { transform: translateY(2px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.word-overshoot {
+  display: inline-block;
+  opacity: 0;
+  animation: word-overshoot 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* === Slow drifting haze layer === */
+@keyframes haze-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.5; }
+  50% { transform: translate3d(2%, -1%, 0); opacity: 0.65; }
+}
+.animate-haze { animation: haze-drift 14s ease-in-out infinite; }
+
 /* === Floating particles === */
 @keyframes particle-float {
   0% { transform: translate3d(0, 100vh, 0) scale(0); opacity: 0; }
@@ -334,7 +363,8 @@
 @media (prefers-reduced-motion: reduce) {
   .reveal, .animate-float-up, .animate-ember-pulse, .animate-slow-zoom,
   .animate-hint-drag, .animate-spin-slow, .animate-marquee, .text-gradient-animated,
-  .word-blast, .animate-cta-pulse, .particle, .beam-sweep {
+  .word-blast, .word-overshoot, .animate-cta-pulse, .particle, .beam-sweep,
+  .hero-enter, .animate-haze {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
