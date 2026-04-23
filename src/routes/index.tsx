@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { BeforeAfter } from "@/components/BeforeAfter";
 import { Portfolio } from "@/components/Portfolio";
 import { AspectLogo } from "@/components/AspectLogo";
+import { Particles } from "@/components/Particles";
+import { MagneticButton } from "@/components/MagneticButton";
 import { useReveal } from "@/hooks/use-reveal";
 import heroBg from "@/assets/hero-bg.jpg";
 
@@ -84,47 +86,60 @@ function Hero() {
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,oklch(0.62_0.25_305_/_0.25),transparent_60%),radial-gradient(ellipse_at_80%_80%,oklch(0.72_0.22_315_/_0.18),transparent_55%)]" />
+      <Particles count={30} />
+      <div className="beam-sweep" />
 
       <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 pt-32 pb-20 md:px-12">
-        <div className="max-w-3xl animate-float-up">
-          <div className="mb-8 flex items-center gap-3">
+        <div className="max-w-4xl">
+          <div className="mb-8 flex items-center gap-3 word-blast" style={{ animationDelay: "0.05s" }}>
             <span className="h-px w-12 bg-ember" />
             <span className="font-display text-sm tracking-[0.3em] text-ember">
-              AUTOMOTIVE PHOTOGRAPHY · AI
+              EVERY DAY YOU WAIT, YOU LOSE A SALE
             </span>
           </div>
 
-          <h1 className="font-display text-6xl leading-[0.9] tracking-tight text-foreground md:text-8xl lg:text-[10rem]">
-            FROM THE GARAGE
+          <h1 className="font-display text-6xl leading-[0.9] tracking-tight text-foreground md:text-8xl lg:text-[9rem]">
+            <span className="word-blast" style={{ animationDelay: "0.15s" }}>SELL&nbsp;</span>
+            <span className="word-blast text-gradient-animated" style={{ animationDelay: "0.3s" }}>MORE</span>
+            <span className="word-blast" style={{ animationDelay: "0.45s" }}>&nbsp;CARS,</span>
             <br />
-            <span className="font-editorial text-5xl text-gradient-animated md:text-7xl lg:text-9xl">
-              to the cover
+            <span className="word-blast font-editorial text-5xl text-gradient-animated md:text-7xl lg:text-[8rem]" style={{ animationDelay: "0.65s" }}>
+              instantly.
             </span>
             <br />
-            OF A MAGAZINE.
+            <span className="word-blast" style={{ animationDelay: "0.85s" }}>LOOK&nbsp;</span>
+            <span className="word-blast text-gradient-animated" style={{ animationDelay: "1s" }}>PROFESSIONAL.</span>
           </h1>
 
-          <p className="mt-10 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-            Aspect takes that crooked photo shot in the parking lot and turns it
-            into a cinematic image that sells. In minutes. No studio.
+          <p
+            className="mt-10 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl word-blast"
+            style={{ animationDelay: "1.2s" }}
+          >
+            That crooked photo from the parking lot? We turn it into a
+            magazine-cover image that <span className="text-foreground font-medium">moves metal</span>. In minutes. No studio.
           </p>
 
-          <div className="mt-12 flex flex-col gap-4 sm:flex-row">
-            <a
-              href="#portfolio"
-              className="group relative overflow-hidden rounded-sm bg-ember px-8 py-4 text-center font-display text-base tracking-widest text-accent-foreground transition hover:bg-ember-glow"
+          <div className="mt-12 flex flex-col gap-4 sm:flex-row word-blast" style={{ animationDelay: "1.4s" }}>
+            <MagneticButton
+              href="#contact"
+              className="group relative overflow-hidden rounded-sm bg-ember px-10 py-5 text-center font-display text-base tracking-widest text-accent-foreground animate-cta-pulse hover:bg-ember-glow"
             >
-              VIEW PORTFOLIO →
-            </a>
+              <span className="relative z-10">UPGRADE MY PHOTOS →</span>
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+            </MagneticButton>
             <a
               href="#work"
-              className="rounded-sm border border-border px-8 py-4 text-center font-display text-base tracking-widest text-foreground transition hover:border-ember hover:text-ember"
+              className="rounded-sm border border-border px-8 py-5 text-center font-display text-base tracking-widest text-foreground transition hover:border-ember hover:text-ember"
             >
-              SEE TRANSFORMATIONS
+              SEE THE PROOF
             </a>
           </div>
 
-          <div className="mt-16 flex items-center gap-8 text-sm text-muted-foreground">
+          <div
+            className="mt-16 flex items-center gap-8 text-sm text-muted-foreground word-blast"
+            style={{ animationDelay: "1.6s" }}
+          >
             <Stat n="12k+" label="Photos retouched" />
             <div className="h-8 w-px bg-border" />
             <Stat n="2 yrs" label="In business" />
@@ -327,6 +342,7 @@ function CTA() {
         style={{ backgroundImage: `url(${heroBg})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
+      <Particles count={18} />
 
       <div className="relative mx-auto max-w-4xl px-6 text-center md:px-12 reveal">
         <h2 className="font-display text-6xl leading-[0.9] tracking-tight md:text-8xl">
@@ -339,13 +355,13 @@ function CTA() {
           tailored to your fleet, lot or personal collection.
         </p>
         <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <a
+          <MagneticButton
             href="mailto:aspecttdigital@gmail.com"
-            className="group relative overflow-hidden rounded-sm bg-ember px-10 py-4 font-display text-base tracking-widest text-accent-foreground transition hover:scale-105 hover:bg-ember-glow"
+            className="group relative overflow-hidden rounded-sm bg-ember px-10 py-5 font-display text-base tracking-widest text-accent-foreground animate-cta-pulse hover:bg-ember-glow"
           >
             <span className="relative z-10">EMAIL US →</span>
             <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-          </a>
+          </MagneticButton>
         </div>
         <p className="mt-6 font-display text-sm tracking-[0.3em] text-muted-foreground">
           aspecttdigital@gmail.com
