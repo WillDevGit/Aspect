@@ -7,6 +7,7 @@ import { Particles } from "@/components/Particles";
 import { MagneticButton } from "@/components/MagneticButton";
 import { useReveal } from "@/hooks/use-reveal";
 import heroBg from "@/assets/hero-bg.jpg";
+import heroCar from "@/assets/hero-car.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
