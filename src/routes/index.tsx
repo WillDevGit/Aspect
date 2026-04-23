@@ -273,15 +273,6 @@ function StatCard({
   );
 }
 
-function Stat({ n, label }: { n: string; label: string }) {
-  return (
-    <div>
-      <div className="font-display text-3xl text-foreground">{n}</div>
-      <div className="text-xs uppercase tracking-widest">{label}</div>
-    </div>
-  );
-}
-
 function Marquee() {
   const words = [
     "CINEMATIC",
