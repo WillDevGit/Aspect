@@ -363,7 +363,8 @@
 @media (prefers-reduced-motion: reduce) {
   .reveal, .animate-float-up, .animate-ember-pulse, .animate-slow-zoom,
   .animate-hint-drag, .animate-spin-slow, .animate-marquee, .text-gradient-animated,
-  .word-blast, .animate-cta-pulse, .particle, .beam-sweep {
+  .word-blast, .word-overshoot, .animate-cta-pulse, .particle, .beam-sweep,
+  .hero-enter, .animate-haze {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
