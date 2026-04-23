@@ -217,24 +217,15 @@ function Hero() {
   );
 }
 
-function StatCard({
-  value,
-  label,
-  icon,
-}: {
-  value: string;
-  label: string;
-  icon: React.ReactNode;
-}) {
+function InlineStat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="flex flex-col items-center gap-1 px-2 text-center">
-      <span className="text-ember">{icon}</span>
-      <div className="font-display text-3xl tracking-tight text-foreground md:text-4xl">
+    <div className="flex flex-col">
+      <span className="font-display text-4xl leading-none tracking-tight text-foreground md:text-5xl [text-shadow:0_2px_20px_rgba(0,0,0,0.7)]">
         {value}
-      </div>
-      <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+      </span>
+      <span className="mt-2 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
         {label}
-      </div>
+      </span>
     </div>
   );
 }
