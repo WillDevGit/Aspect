@@ -7,6 +7,7 @@ import { Particles } from "@/components/Particles";
 import { MagneticButton } from "@/components/MagneticButton";
 import { useReveal } from "@/hooks/use-reveal";
 import heroBg from "@/assets/hero-bg.jpg";
+import heroCar from "@/assets/hero-car.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -88,104 +89,186 @@ function Hero() {
 
   return (
     <section className="relative grain min-h-screen overflow-hidden bg-black hero-enter">
-      {/* Cinematic car plate with rim-light + parallax */}
+      {/* Base gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,oklch(0.22_0.08_305_/_0.55),transparent_60%),linear-gradient(180deg,#05030a_0%,#0a0612_60%,#000_100%)]" />
+
+      {/* Top center light flare */}
+      <div className="pointer-events-none absolute left-1/2 top-0 h-64 w-[80%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center_top,oklch(0.78_0.22_315_/_0.35),transparent_70%)]" />
+
+      {/* Car image — right side, with mouse parallax */}
       <div
-        className="absolute inset-0 will-change-transform"
+        className="pointer-events-none absolute inset-y-0 right-0 w-full md:w-[62%] will-change-transform"
         style={{
-          transform: `translate3d(${mouse.x * -18}px, ${scrollY * 0.3 + mouse.y * -12}px, 0)`,
+          transform: `translate3d(${mouse.x * -10}px, ${scrollY * 0.18 + mouse.y * -8}px, 0)`,
         }}
       >
         <div
-          className="absolute inset-0 bg-cover bg-center animate-slow-zoom"
+          className="absolute inset-0 bg-no-repeat bg-right bg-cover animate-slow-zoom"
           style={{
-            backgroundImage: `url(${heroBg})`,
-            filter: "contrast(1.25) saturate(1.15) brightness(0.78)",
+            backgroundImage: `url(${heroCar})`,
+            filter: "contrast(1.15) saturate(1.1)",
           }}
         />
-        {/* Rim light from above-right */}
-        <div className="absolute inset-0 mix-blend-screen bg-[radial-gradient(ellipse_at_75%_15%,oklch(0.85_0.18_315_/_0.35),transparent_55%)]" />
-        {/* Edge purple glow */}
-        <div className="absolute inset-0 mix-blend-screen bg-[radial-gradient(ellipse_at_20%_85%,oklch(0.55_0.28_300_/_0.3),transparent_60%)]" />
+        {/* Left fade so car melts into the dark text area */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent md:via-black/30" />
+        {/* Bottom fade */}
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
+        {/* Purple rim glow accent */}
+        <div className="absolute inset-0 mix-blend-screen bg-[radial-gradient(ellipse_at_60%_30%,oklch(0.75_0.22_315_/_0.18),transparent_55%)]" />
       </div>
 
-      {/* Deep black floor + top fade */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/55 to-black" />
-      {/* Soft vignette */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.85)_100%)]" />
-      {/* Subtle haze drift */}
-      <div className="absolute inset-0 opacity-50 animate-haze bg-[radial-gradient(ellipse_at_30%_40%,oklch(0.62_0.25_305_/_0.18),transparent_55%),radial-gradient(ellipse_at_80%_70%,oklch(0.72_0.22_315_/_0.12),transparent_55%)]" />
-      <Particles count={26} />
+      {/* Soft vignette + haze + particles */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.85)_100%)]" />
+      <Particles count={22} />
       <div className="beam-sweep" />
 
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 pt-32 pb-20 md:px-12">
-        <div className="max-w-4xl">
-          <div className="mb-8 flex items-center gap-3 word-blast" style={{ animationDelay: "0.05s" }}>
-            <span className="h-px w-12 bg-ember" />
-            <span className="font-display text-sm tracking-[0.3em] text-ember">
-              EVERY DAY YOU WAIT, YOU LOSE A SALE
+      {/* Foreground content */}
+      <div className="relative mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-8 px-6 pt-32 pb-12 md:grid-cols-12 md:px-12">
+        <div className="md:col-span-7 flex flex-col justify-center">
+          <div className="mb-6 word-blast" style={{ animationDelay: "0.05s" }}>
+            <span className="font-body text-xs font-medium uppercase tracking-[0.35em] text-ember-glow">
+              People buy with their eyes first.
             </span>
           </div>
 
-          <h1 className="font-display text-6xl leading-[0.9] tracking-tight text-foreground md:text-8xl lg:text-[8.5rem] [text-shadow:0_2px_40px_rgba(0,0,0,0.6)]">
+          <h1 className="font-display text-[3.4rem] leading-[0.95] tracking-tight text-foreground sm:text-7xl md:text-[6rem] lg:text-[7rem] [text-shadow:0_2px_40px_rgba(0,0,0,0.7)]">
             <span className="word-overshoot inline-block" style={{ animationDelay: "0.15s" }}>Make&nbsp;</span>
-            <span className="word-overshoot inline-block" style={{ animationDelay: "0.28s" }}>your&nbsp;</span>
-            <span className="word-overshoot inline-block" style={{ animationDelay: "0.41s" }}>car</span>
+            <span className="word-overshoot inline-block" style={{ animationDelay: "0.27s" }}>your&nbsp;</span>
+            <span className="word-overshoot inline-block" style={{ animationDelay: "0.39s" }}>car</span>
             <br />
-            <span className="word-overshoot inline-block" style={{ animationDelay: "0.56s" }}>impossible&nbsp;</span>
-            <span className="word-overshoot inline-block" style={{ animationDelay: "0.7s" }}>to&nbsp;</span>
+            <span className="word-overshoot inline-block" style={{ animationDelay: "0.52s" }}>impossible&nbsp;</span>
+            <span className="word-overshoot inline-block" style={{ animationDelay: "0.66s" }}>to</span>
+            <br />
             <span
-              className="word-overshoot inline-block font-editorial text-gradient-animated [filter:drop-shadow(0_0_28px_oklch(0.72_0.22_315_/_0.55))]"
-              style={{ animationDelay: "0.86s" }}
+              className="word-overshoot inline-block font-editorial text-gradient-animated [filter:drop-shadow(0_0_32px_oklch(0.72_0.22_315_/_0.7))]"
+              style={{ animationDelay: "0.82s" }}
             >
               ignore.
             </span>
           </h1>
 
           <p
-            className="mt-10 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl word-blast"
-            style={{ animationDelay: "1.1s" }}
+            className="mt-8 max-w-md text-base leading-relaxed text-muted-foreground md:text-lg word-blast"
+            style={{ animationDelay: "1.05s" }}
           >
-            That crooked photo from the parking lot? We turn it into a
-            magazine-cover image that <span className="text-foreground font-medium">moves metal</span>. In minutes. No studio.
+            We transform ordinary car photos into high-impact images that grab
+            attention and{" "}
+            <span className="text-ember-glow font-medium">sell faster</span>.
           </p>
 
-          <div className="mt-12 flex flex-col gap-4 sm:flex-row word-blast" style={{ animationDelay: "1.3s" }}>
+          <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center word-blast" style={{ animationDelay: "1.25s" }}>
             <MagneticButton
-              href="#contact"
-              className="group relative overflow-hidden rounded-sm bg-ember px-10 py-5 text-center font-display text-base tracking-widest text-accent-foreground animate-cta-pulse hover:bg-ember-glow"
+              href="mailto:aspecttdigital@gmail.com"
+              className="group relative overflow-hidden rounded-full border border-ember/60 bg-transparent px-9 py-4 text-center font-display text-sm tracking-[0.25em] text-foreground shadow-[0_0_30px_-5px_oklch(0.62_0.25_305_/_0.6)] transition hover:bg-ember/10"
             >
-              <span className="relative z-10">UPGRADE MY PHOTOS →</span>
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <span className="relative z-10 inline-flex items-center gap-3">
+                GET IN TOUCH <span aria-hidden>→</span>
+              </span>
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
             </MagneticButton>
-            <a
-              href="#work"
-              className="rounded-sm border border-border px-8 py-5 text-center font-display text-base tracking-widest text-foreground transition hover:border-ember hover:text-ember"
-            >
-              SEE THE PROOF
-            </a>
-          </div>
 
-          <div
-            className="mt-16 flex items-center gap-8 text-sm text-muted-foreground word-blast"
-            style={{ animationDelay: "1.5s" }}
-          >
-            <Stat n="12k+" label="Photos retouched" />
-            <div className="h-8 w-px bg-border" />
-            <Stat n="2 yrs" label="In business" />
-            <div className="h-8 w-px bg-border" />
-            <Stat n="320+" label="Dealerships served" />
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-ember/50 text-ember">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+                </svg>
+              </span>
+              <div className="leading-tight">
+                <div className="font-display text-sm tracking-[0.2em] text-foreground">
+                  FAST. POWERFUL. IRRESISTIBLE.
+                </div>
+                <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+                  Photos that sell
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+
+        {/* Stats glass card — bottom right */}
+        <div className="md:col-span-12 flex items-end justify-end">
+          <div
+            className="word-blast w-full max-w-xl rounded-2xl border border-white/10 bg-black/55 px-6 py-5 backdrop-blur-md shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]"
+            style={{ animationDelay: "1.45s" }}
+          >
+            <div className="grid grid-cols-3 divide-x divide-white/10">
+              <StatCard
+                value="3X"
+                label="More views"
+                icon={
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" />
+                    <path d="M19 14l.7 2.1L22 17l-2.3.9L19 20l-.7-2.1L16 17l2.3-.9L19 14z" />
+                  </svg>
+                }
+              />
+              <StatCard
+                value="2.7X"
+                label="Faster sales"
+                icon={
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 17l6-6 4 4 8-8" />
+                    <path d="M14 7h7v7" />
+                  </svg>
+                }
+              />
+              <StatCard
+                value="100%"
+                label="Pro quality"
+                icon={
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
+                    <path d="M12 2l9 5v6c0 5-4 8-9 9-5-1-9-4-9-9V7l9-5z" />
+                    <path d="M9 12l2 2 4-4" strokeLinecap="round" />
+                  </svg>
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Trust bar */}
+      <div className="relative mx-auto max-w-7xl px-6 pb-8 md:px-12">
+        <div className="mb-4 flex items-center gap-4">
+          <span className="h-px flex-1 bg-border" />
+          <span className="font-display text-[11px] tracking-[0.4em] text-ember">
+            TRUSTED BY DEALERS WHO SELL MORE
+          </span>
+          <span className="h-px flex-1 bg-border" />
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 opacity-60">
+          {["Webmotors", "OLX", "iCarros", "MobiAuto", "Auto+", "CrediNissan"].map((b) => (
+            <span
+              key={b}
+              className="font-display text-base tracking-[0.2em] text-muted-foreground transition hover:text-foreground md:text-lg"
+            >
+              {b}
+            </span>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-function Stat({ n, label }: { n: string; label: string }) {
+function StatCard({
+  value,
+  label,
+  icon,
+}: {
+  value: string;
+  label: string;
+  icon: React.ReactNode;
+}) {
   return (
-    <div>
-      <div className="font-display text-3xl text-foreground">{n}</div>
-      <div className="text-xs uppercase tracking-widest">{label}</div>
+    <div className="flex flex-col items-center gap-1 px-2 text-center">
+      <span className="text-ember">{icon}</span>
+      <div className="font-display text-3xl tracking-tight text-foreground md:text-4xl">
+        {value}
+      </div>
+      <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+        {label}
+      </div>
     </div>
   );
 }
