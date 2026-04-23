@@ -7,7 +7,6 @@ import { Particles } from "@/components/Particles";
 import { MagneticButton } from "@/components/MagneticButton";
 import { useReveal } from "@/hooks/use-reveal";
 import heroBg from "@/assets/hero-bg.jpg";
-import heroCar from "@/assets/hero-car.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -89,36 +88,32 @@ function Hero() {
 
   return (
     <section className="relative grain min-h-screen overflow-hidden bg-black hero-enter">
-      {/* Base gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,oklch(0.22_0.08_305_/_0.55),transparent_60%),linear-gradient(180deg,#05030a_0%,#0a0612_60%,#000_100%)]" />
-
-      {/* Top center light flare */}
-      <div className="pointer-events-none absolute left-1/2 top-0 h-64 w-[80%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center_top,oklch(0.78_0.22_315_/_0.35),transparent_70%)]" />
-
-      {/* Car image — right side, with mouse parallax */}
+      {/* Single full-width cinematic background image (car + scene baked in) */}
       <div
-        className="pointer-events-none absolute inset-y-0 right-0 w-full md:w-[62%] will-change-transform"
+        className="absolute inset-0 will-change-transform"
         style={{
-          transform: `translate3d(${mouse.x * -10}px, ${scrollY * 0.18 + mouse.y * -8}px, 0)`,
+          transform: `translate3d(${mouse.x * -8}px, ${scrollY * 0.12 + mouse.y * -6}px, 0)`,
         }}
       >
         <div
-          className="absolute inset-0 bg-no-repeat bg-right bg-cover animate-slow-zoom"
+          className="absolute inset-0 bg-cover bg-center animate-slow-zoom"
           style={{
-            backgroundImage: `url(${heroCar})`,
-            filter: "contrast(1.15) saturate(1.1)",
+            backgroundImage: `url(${heroBg})`,
+            filter: "contrast(1.08) saturate(1.05)",
           }}
         />
-        {/* Left fade so car melts into the dark text area */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent md:via-black/30" />
-        {/* Bottom fade */}
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
-        {/* Purple rim glow accent */}
-        <div className="absolute inset-0 mix-blend-screen bg-[radial-gradient(ellipse_at_60%_30%,oklch(0.75_0.22_315_/_0.18),transparent_55%)]" />
       </div>
 
-      {/* Soft vignette + haze + particles */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.85)_100%)]" />
+      {/* Soft left-side fade for text legibility — seamless, no hard edge.
+          Goes from black on the far left to fully transparent past the headline,
+          so the car on the right is never cut off. */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.55)_25%,rgba(0,0,0,0.15)_45%,transparent_60%)]" />
+
+      {/* Subtle bottom fade into the page */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black to-transparent" />
+
+      {/* Soft vignette + atmospheric haze + particles */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.7)_100%)]" />
       <Particles count={22} />
       <div className="beam-sweep" />
 
@@ -185,45 +180,16 @@ function Hero() {
           </div>
         </div>
 
-        {/* Stats glass card — bottom right */}
-        <div className="md:col-span-12 flex items-end justify-end">
-          <div
-            className="word-blast w-full max-w-xl rounded-2xl border border-white/10 bg-black/55 px-6 py-5 backdrop-blur-md shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]"
-            style={{ animationDelay: "1.45s" }}
-          >
-            <div className="grid grid-cols-3 divide-x divide-white/10">
-              <StatCard
-                value="3X"
-                label="More views"
-                icon={
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" />
-                    <path d="M19 14l.7 2.1L22 17l-2.3.9L19 20l-.7-2.1L16 17l2.3-.9L19 14z" />
-                  </svg>
-                }
-              />
-              <StatCard
-                value="2.7X"
-                label="Faster sales"
-                icon={
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 17l6-6 4 4 8-8" />
-                    <path d="M14 7h7v7" />
-                  </svg>
-                }
-              />
-              <StatCard
-                value="100%"
-                label="Pro quality"
-                icon={
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
-                    <path d="M12 2l9 5v6c0 5-4 8-9 9-5-1-9-4-9-9V7l9-5z" />
-                    <path d="M9 12l2 2 4-4" strokeLinecap="round" />
-                  </svg>
-                }
-              />
-            </div>
-          </div>
+        {/* Inline stats — no card, no block. Sits as text on the seamless background. */}
+        <div
+          className="md:col-span-7 word-blast mt-12 flex flex-wrap gap-x-10 gap-y-6"
+          style={{ animationDelay: "1.45s" }}
+        >
+          <InlineStat value="3X" label="More views" />
+          <span className="hidden h-10 w-px bg-white/15 sm:block" />
+          <InlineStat value="2.7X" label="Faster sales" />
+          <span className="hidden h-10 w-px bg-white/15 sm:block" />
+          <InlineStat value="100%" label="Pro quality" />
         </div>
       </div>
 
@@ -251,24 +217,15 @@ function Hero() {
   );
 }
 
-function StatCard({
-  value,
-  label,
-  icon,
-}: {
-  value: string;
-  label: string;
-  icon: React.ReactNode;
-}) {
+function InlineStat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="flex flex-col items-center gap-1 px-2 text-center">
-      <span className="text-ember">{icon}</span>
-      <div className="font-display text-3xl tracking-tight text-foreground md:text-4xl">
+    <div className="flex flex-col">
+      <span className="font-display text-4xl leading-none tracking-tight text-foreground md:text-5xl [text-shadow:0_2px_20px_rgba(0,0,0,0.7)]">
         {value}
-      </div>
-      <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+      </span>
+      <span className="mt-2 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
         {label}
-      </div>
+      </span>
     </div>
   );
 }
