@@ -40,6 +40,7 @@ function Index() {
       <EngineAudio />
       <Header />
       <ScrollHero />
+      <TrustBar />
       <Marquee />
       <Comparison />
       <Portfolio />
@@ -74,133 +75,11 @@ function Header() {
   );
 }
 
-function Hero() {
-  const [scrollY, setScrollY] = useState(0);
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY);
-    const onMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
-      setMouse({ x, y });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("mousemove", onMove, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("mousemove", onMove);
-    };
-  }, []);
-
+/* Trust bar (dealer logos) — kept under the scroll-driven hero. */
+function TrustBar() {
   return (
-    <section className="relative grain min-h-screen overflow-hidden bg-black hero-enter">
-      {/* Single full-width cinematic background image (car + scene baked in) */}
-      <div
-        className="absolute inset-0 will-change-transform"
-        style={{
-          transform: `translate3d(${mouse.x * -8}px, ${scrollY * 0.12 + mouse.y * -6}px, 0)`,
-        }}
-      >
-        <div
-          className="absolute inset-0 bg-cover bg-center animate-slow-zoom"
-          style={{
-            backgroundImage: `url(${heroBg})`,
-            filter: "contrast(1.08) saturate(1.05)",
-          }}
-        />
-      </div>
-
-      {/* Soft left-side fade for text legibility — seamless, no hard edge.
-          Goes from black on the far left to fully transparent past the headline,
-          so the car on the right is never cut off. */}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.55)_25%,rgba(0,0,0,0.15)_45%,transparent_60%)]" />
-
-      {/* Subtle bottom fade into the page */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black to-transparent" />
-
-      {/* Soft vignette + atmospheric haze + particles */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.7)_100%)]" />
-      <Particles count={22} />
-      <div className="beam-sweep" />
-
-      {/* Foreground content */}
-      <div className="relative mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-8 px-6 pt-32 pb-12 md:grid-cols-12 md:px-12">
-        <div className="md:col-span-7 flex flex-col justify-center">
-          <div className="mb-6 word-blast" style={{ animationDelay: "0.05s" }}>
-            <span className="font-body text-xs font-medium uppercase tracking-[0.35em] text-ember-glow">
-              People buy with their eyes first.
-            </span>
-          </div>
-
-          <h1 className="font-display text-[3.4rem] leading-[0.95] tracking-tight text-foreground sm:text-7xl md:text-[6rem] lg:text-[7rem] [text-shadow:0_2px_40px_rgba(0,0,0,0.7)]">
-            <span className="word-overshoot inline-block" style={{ animationDelay: "0.15s" }}>Make&nbsp;</span>
-            <span className="word-overshoot inline-block" style={{ animationDelay: "0.27s" }}>your&nbsp;</span>
-            <span className="word-overshoot inline-block" style={{ animationDelay: "0.39s" }}>car</span>
-            <br />
-            <span className="word-overshoot inline-block" style={{ animationDelay: "0.52s" }}>impossible&nbsp;</span>
-            <span className="word-overshoot inline-block" style={{ animationDelay: "0.66s" }}>to</span>
-            <br />
-            <span
-              className="word-overshoot inline-block font-editorial text-gradient-animated [filter:drop-shadow(0_0_32px_oklch(0.72_0.22_315_/_0.7))]"
-              style={{ animationDelay: "0.82s" }}
-            >
-              ignore.
-            </span>
-          </h1>
-
-          <p
-            className="mt-8 max-w-md text-base leading-relaxed text-muted-foreground md:text-lg word-blast"
-            style={{ animationDelay: "1.05s" }}
-          >
-            We transform ordinary car photos into high-impact images that grab
-            attention and{" "}
-            <span className="text-ember-glow font-medium">sell faster</span>.
-          </p>
-
-          <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center word-blast" style={{ animationDelay: "1.25s" }}>
-            <MagneticButton
-              href="mailto:aspecttdigital@gmail.com"
-              className="group relative overflow-hidden rounded-full border border-ember/60 bg-transparent px-9 py-4 text-center font-display text-sm tracking-[0.25em] text-foreground shadow-[0_0_30px_-5px_oklch(0.62_0.25_305_/_0.6)] transition hover:bg-ember/10"
-            >
-              <span className="relative z-10 inline-flex items-center gap-3">
-                GET IN TOUCH <span aria-hidden>→</span>
-              </span>
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-            </MagneticButton>
-
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-ember/50 text-ember">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
-                </svg>
-              </span>
-              <div className="leading-tight">
-                <div className="font-display text-sm tracking-[0.2em] text-foreground">
-                  FAST. POWERFUL. IRRESISTIBLE.
-                </div>
-                <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-                  Photos that sell
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Inline stats — no card, no block. Sits as text on the seamless background. */}
-        <div
-          className="md:col-span-7 word-blast mt-12 flex flex-wrap gap-x-10 gap-y-6"
-          style={{ animationDelay: "1.45s" }}
-        >
-          <InlineStat value="3X" label="More views" />
-          <span className="hidden h-10 w-px bg-white/15 sm:block" />
-          <InlineStat value="2.7X" label="Faster sales" />
-          <span className="hidden h-10 w-px bg-white/15 sm:block" />
-          <InlineStat value="100%" label="Pro quality" />
-        </div>
-      </div>
-
-      {/* Trust bar */}
-      <div className="relative mx-auto max-w-7xl px-6 pb-8 md:px-12">
+    <div className="relative border-t border-border bg-black">
+      <div className="mx-auto max-w-7xl px-6 py-8 md:px-12">
         <div className="mb-4 flex items-center gap-4">
           <span className="h-px flex-1 bg-border" />
           <span className="font-display text-[11px] tracking-[0.4em] text-ember">
@@ -219,19 +98,6 @@ function Hero() {
           ))}
         </div>
       </div>
-    </section>
-  );
-}
-
-function InlineStat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="flex flex-col">
-      <span className="font-display text-4xl leading-none tracking-tight text-foreground md:text-5xl [text-shadow:0_2px_20px_rgba(0,0,0,0.7)]">
-        {value}
-      </span>
-      <span className="mt-2 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-        {label}
-      </span>
     </div>
   );
 }
