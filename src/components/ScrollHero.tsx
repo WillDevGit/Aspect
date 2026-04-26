@@ -42,6 +42,9 @@ export function ScrollHero() {
   // Background dim → reveal
   const bgOverlay = useTransform(scrollYProgress, [0, 0.45, 1], [1, 0.55, 0.4]);
 
+  const carFilter = useTransform(carBlur, (b) => `blur(${b}px) contrast(1.1) saturate(1.05)`);
+  const hintOpacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
+
   // Headline stays put while we scroll over the hero
   const titleOpacity = useTransform(scrollYProgress, [0.35, 0.55, 0.92, 1], [0, 1, 1, 0.7]);
   const titleY = useTransform(scrollYProgress, [0.35, 0.55], [40, 0]);
@@ -70,9 +73,7 @@ export function ScrollHero() {
             scale: p ? carScale : 1,
             y: p ? carY : 0,
             opacity: p ? carOpacity : 1,
-            filter: p
-              ? useTransform(carBlur, (b) => `blur(${b}px) contrast(1.1) saturate(1.05)`)
-              : "contrast(1.1) saturate(1.05)",
+            filter: p ? carFilter : "contrast(1.1) saturate(1.05)",
           }}
         />
 
@@ -198,7 +199,7 @@ export function ScrollHero() {
         {!reduce && (
           <motion.div
             className="pointer-events-none absolute bottom-6 left-1/2 z-20 -translate-x-1/2 text-center"
-            style={{ opacity: useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]) }}
+            style={{ opacity: hintOpacity }}
           >
             <div className="font-display text-[10px] tracking-[0.4em] text-ember-glow">SCROLL TO REVEAL</div>
             <div className="mx-auto mt-2 h-8 w-px bg-gradient-to-b from-ember-glow to-transparent" />
