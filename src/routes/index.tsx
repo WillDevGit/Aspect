@@ -6,6 +6,7 @@ import { Particles } from "@/components/Particles";
 import { MagneticButton } from "@/components/MagneticButton";
 import { useReveal } from "@/hooks/use-reveal";
 import { ScrollHero } from "@/components/ScrollHero";
+import { Viewer360 } from "@/components/Viewer360";
 import { DriveItCTA } from "@/components/DriveItCTA";
 import { CrosshairCursor } from "@/components/CrosshairCursor";
 import { EngineAudio } from "@/components/EngineAudio";
@@ -41,6 +42,7 @@ function Index() {
       <Header />
       <ScrollHero />
       <TrustBar />
+      <Viewer360 />
       <Marquee />
       <Comparison />
       <Portfolio />
