@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { BeforeAfter } from "@/components/BeforeAfter";
 import { Portfolio } from "@/components/Portfolio";
 import { AspectLogo } from "@/components/AspectLogo";
 import { Particles } from "@/components/Particles";
 import { MagneticButton } from "@/components/MagneticButton";
 import { useReveal } from "@/hooks/use-reveal";
+import { ScrollHero } from "@/components/ScrollHero";
+import { DriveItCTA } from "@/components/DriveItCTA";
+import { CrosshairCursor } from "@/components/CrosshairCursor";
+import { EngineAudio } from "@/components/EngineAudio";
 import heroBg from "@/assets/hero-bg.jpg";
 
 export const Route = createFileRoute("/")({
@@ -33,14 +36,17 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <CrosshairCursor />
+      <EngineAudio />
       <Header />
-      <Hero />
+      <ScrollHero />
       <Marquee />
       <Comparison />
       <Portfolio />
       <Features />
       <Process />
       <CTA />
+      <DriveItCTA />
       <Footer />
     </div>
   );
