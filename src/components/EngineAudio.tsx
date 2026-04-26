@@ -47,6 +47,67 @@ export function EngineAudio() {
     };
   }, [on]);
 
+  // Scroll-driven rev: maps scroll velocity (px/frame) → frequency + gain.
+  // Only active while audio is on. Uses rAF for per-frame velocity sampling.
+  useEffect(() => {
+    if (!on) return;
+
+    let lastScrollY = window.scrollY;
+    let velocity = 0; // smoothed px/frame
+    let rawDelta = 0; // last raw delta sampled by scroll event
+    let rafId = 0;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      rawDelta = Math.abs(y - lastScrollY);
+      lastScrollY = y;
+    };
+
+    const tick = () => {
+      // Lerp velocity toward the latest raw delta, then decay rawDelta so
+      // the value falls back to 0 when scrolling stops.
+      velocity += (rawDelta - velocity) * 0.08;
+      rawDelta *= 0.85;
+
+      const ctx = ctxRef.current;
+      const osc = oscRef.current;
+      const g = gainRef.current;
+      if (ctx && osc && g) {
+        // Map velocity → frequency (60 idle, 120 slow, 220 fast >15px/frame)
+        const v = Math.min(velocity, 30);
+        const freq =
+          v <= 15
+            ? 60 + (v / 15) * 60 // 60 → 120
+            : 120 + ((v - 15) / 15) * 100; // 120 → 220
+        const gainTarget = 0.08 + Math.min(v / 15, 1) * 0.17; // 0.08 → 0.25
+
+        const t = ctx.currentTime;
+        // setTargetAtTime gives a smooth exponential approach with no snap.
+        osc.frequency.setTargetAtTime(freq, t, 0.12);
+        g.gain.setTargetAtTime(gainTarget, t, 0.18);
+      }
+
+      rafId = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafId);
+      // Settle back to idle baseline so a later mute/unmute starts clean.
+      const ctx = ctxRef.current;
+      const osc = oscRef.current;
+      const g = gainRef.current;
+      if (ctx && osc && g) {
+        const t = ctx.currentTime;
+        osc.frequency.setTargetAtTime(60, t, 0.2);
+        g.gain.setTargetAtTime(0.08, t, 0.2);
+      }
+    };
+  }, [on]);
+
   const start = async () => {
     const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new Ctor();
