@@ -408,16 +408,7 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
           {/* Anchor line out to label */}
           <path d={p.anchor} stroke={strokeSoft} strokeWidth="0.6" strokeOpacity="0.7" fill="none" />
           {/* Label text on the anchor end */}
-          <text
-            x={p.anchor.split(" ").slice(-2)[0]}
-            y={Number(p.anchor.split(" ").slice(-1)[0]) - 6}
-            fill="oklch(0.92 0.14 290)"
-            fontSize="9"
-            letterSpacing="3"
-            fontFamily="ui-sans-serif, system-ui"
-          >
-            {p.label}
-          </text>
+          <PartLabel anchor={p.anchor} label={p.label} />
         </motion.g>
       ))}
 
