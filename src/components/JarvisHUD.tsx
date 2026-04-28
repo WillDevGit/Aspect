@@ -418,8 +418,69 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
         </motion.g>
       )}
 
-      {/* Ground reflection */}
-      <line x1="80" y1="402" x2="520" y2="402" stroke={strokeSoft} strokeWidth="0.5" strokeOpacity="0.45" strokeDasharray="2 4" />
+      {/* Holographic projection platform under the car */}
+      <g>
+        {/* Concentric ellipses suggesting a 3D disc */}
+        {[0, 1, 2, 3].map((i) => (
+          <ellipse
+            key={i}
+            cx="300"
+            cy="408"
+            rx={210 - i * 40}
+            ry={(210 - i * 40) * 0.16}
+            stroke={i === 0 ? stroke : strokeSoft}
+            strokeWidth={i === 0 ? 0.9 : 0.5}
+            strokeOpacity={0.7 - i * 0.12}
+            fill="none"
+            strokeDasharray={i % 2 ? "3 4" : undefined}
+          />
+        ))}
+        {/* Tiny tick markers around outer ring */}
+        {Array.from({ length: 36 }).map((_, i) => {
+          const a = (i / 36) * Math.PI * 2;
+          const rx = 210, ry = 210 * 0.16;
+          const x1 = 300 + Math.cos(a) * rx;
+          const y1 = 408 + Math.sin(a) * ry;
+          const x2 = 300 + Math.cos(a) * (rx + 4);
+          const y2 = 408 + Math.sin(a) * (ry + 0.6);
+          return (
+            <line
+              key={i}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke={stroke}
+              strokeWidth="0.5"
+              strokeOpacity={i % 9 === 0 ? 0.9 : 0.4}
+            />
+          );
+        })}
+        {/* Vertical light pillars rising from the disc */}
+        {!reduce &&
+          [-160, -100, -40, 40, 100, 160].map((dx, i) => (
+            <motion.line
+              key={i}
+              x1={300 + dx}
+              y1={408}
+              x2={300 + dx}
+              y2={368}
+              stroke="oklch(0.92 0.16 290)"
+              strokeWidth="0.7"
+              strokeLinecap="round"
+              animate={{ opacity: [0.15, 0.85, 0.15] }}
+              transition={{ duration: 2.4, delay: i * 0.18, repeat: Infinity, ease: "easeInOut" }}
+            />
+          ))}
+        {/* Soft glow under the car */}
+        <ellipse
+          cx="300"
+          cy="408"
+          rx="180"
+          ry="22"
+          fill="oklch(0.78 0.20 290 / 0.18)"
+        />
+      </g>
     </g>
   );
 }
