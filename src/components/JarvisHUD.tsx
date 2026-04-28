@@ -7,11 +7,11 @@ import { motion, useReducedMotion } from "framer-motion";
  * that cycle through scan stages. Pure SVG + Framer Motion. Lightweight.
  */
 const STAGES = [
-  "Scanning image...",
-  "Analyzing surface...",
-  "Enhancing reflections...",
-  "Calibrating light...",
-  "Rendering output...",
+  "Surface mapped",
+  "Geometry analyzed",
+  "Enhancement ready",
+  "Reflections calibrated",
+  "Render complete",
 ];
 
 export function JarvisHUD({ className = "" }: { className?: string }) {
@@ -143,15 +143,8 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
             <path d="M 400 300 L 420 300" stroke="oklch(0.85 0.14 290)" strokeWidth="1" strokeLinecap="round" />
           </motion.g>
 
-          {/* Center crosshair */}
-          <g>
-            <circle cx="300" cy="300" r="46" stroke="oklch(0.82 0.16 290)" strokeWidth="0.6" strokeOpacity="0.7" />
-            <circle cx="300" cy="300" r="3" fill="oklch(0.92 0.14 290)" />
-            <line x1="270" y1="300" x2="290" y2="300" stroke="oklch(0.85 0.14 290)" strokeWidth="0.8" />
-            <line x1="310" y1="300" x2="330" y2="300" stroke="oklch(0.85 0.14 290)" strokeWidth="0.8" />
-            <line x1="300" y1="270" x2="300" y2="290" stroke="oklch(0.85 0.14 290)" strokeWidth="0.8" />
-            <line x1="300" y1="310" x2="300" y2="330" stroke="oklch(0.85 0.14 290)" strokeWidth="0.8" />
-          </g>
+          {/* Wireframe car blueprint (side profile) */}
+          <WireframeCar reduce={!!reduce} />
 
           {/* Connector lines to data labels (top-right & bottom-left) */}
           <g stroke="oklch(0.78 0.16 290)" strokeWidth="0.6" strokeOpacity="0.55">
@@ -175,7 +168,7 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
         <DataLabel position="top-left" title="SYS" value="ONLINE" dot />
 
         {/* Center label */}
-        <div className="absolute left-1/2 top-[58%] -translate-x-1/2 text-center">
+        <div className="absolute left-1/2 top-[68%] -translate-x-1/2 text-center">
           <div className="font-display text-[10px] tracking-[0.5em] text-foreground/70">
             A · S · P · E · C · T
           </div>
@@ -236,5 +229,221 @@ function DataLabel({
         )}
       </span>
     </motion.div>
+  );
+}
+
+/**
+ * WireframeCar — side-profile blueprint of a sports car drawn with thin neon
+ * strokes. Each segment animates its strokeDashoffset from full → 0 in
+ * sequence, producing a "progressively drawn" hologram effect. Nodes pulse
+ * at key body points (hood, roof, doors, wheels) once their segment is in.
+ */
+function WireframeCar({ reduce }: { reduce: boolean }) {
+  // All paths share viewBox 0..600. Car is centered around (300, 300),
+  // roughly 320 wide × 110 tall.
+  const stroke = "oklch(0.86 0.16 290)";
+  const strokeSoft = "oklch(0.78 0.14 280)";
+
+  // Segments (rough side silhouette + structural lines)
+  const segments: { d: string; len: number; w?: number; color?: string }[] = [
+    // Main body silhouette (hood → windshield → roof → rear glass → trunk → bumper → underbody → front)
+    {
+      d: "M 160 320 L 200 304 L 232 286 L 270 274 L 304 268 L 336 274 L 372 286 L 408 296 L 436 304 L 444 320",
+      len: 320,
+      w: 1.1,
+    },
+    // Underbody / rocker
+    { d: "M 168 332 L 436 332", len: 268, w: 0.7, color: strokeSoft },
+    // Greenhouse (windows)
+    { d: "M 248 286 L 268 270 L 332 270 L 360 286", len: 150, w: 0.9 },
+    // A-pillar / B-pillar / C-pillar
+    { d: "M 268 270 L 280 286", len: 22, w: 0.6, color: strokeSoft },
+    { d: "M 304 270 L 304 286", len: 16, w: 0.6, color: strokeSoft },
+    { d: "M 332 270 L 322 286", len: 22, w: 0.6, color: strokeSoft },
+    // Door cut line
+    { d: "M 220 308 L 304 308 L 360 304", len: 144, w: 0.5, color: strokeSoft },
+    // Hood seam
+    { d: "M 200 304 L 248 296", len: 50, w: 0.5, color: strokeSoft },
+    // Front fascia detail
+    { d: "M 160 320 L 168 332 L 184 336", len: 36, w: 0.6, color: strokeSoft },
+    // Rear fascia detail
+    { d: "M 444 320 L 436 332 L 420 336", len: 36, w: 0.6, color: strokeSoft },
+    // Wheel arches
+    { d: "M 196 332 A 28 28 0 0 1 252 332", len: 90, w: 0.8 },
+    { d: "M 360 332 A 28 28 0 0 1 416 332", len: 90, w: 0.8 },
+  ];
+
+  // Wheels (drawn as full circles, animated separately)
+  const wheels = [
+    { cx: 224, cy: 340, r: 22 },
+    { cx: 388, cy: 340, r: 22 },
+  ];
+
+  // Highlight nodes — subtle pulsing dots on key parts
+  const nodes = [
+    { cx: 230, cy: 298, label: "hood", delay: 1.6 },
+    { cx: 304, cy: 270, label: "roof", delay: 2.0 },
+    { cx: 380, cy: 296, label: "panel", delay: 2.4 },
+    { cx: 224, cy: 340, label: "wheel-f", delay: 2.8 },
+    { cx: 388, cy: 340, label: "wheel-r", delay: 3.0 },
+  ];
+
+  // Total draw cycle ~ 4.5s, then a 1.5s "complete" pause before re-loop.
+  // Using strokeDasharray + animated dashoffset.
+  const baseDelay = 0.15;
+  const stagger = 0.18;
+
+  return (
+    <g>
+      {/* Faint guide box around car */}
+      <rect
+        x="148"
+        y="248"
+        width="304"
+        height="112"
+        rx="3"
+        stroke="oklch(0.78 0.14 290)"
+        strokeWidth="0.4"
+        strokeOpacity="0.25"
+        strokeDasharray="2 4"
+        fill="none"
+      />
+      {/* Corner brackets on guide box */}
+      {[
+        ["M 148 256 L 148 248 L 156 248", ""],
+        ["M 444 248 L 452 248 L 452 256", ""],
+        ["M 148 352 L 148 360 L 156 360", ""],
+        ["M 444 360 L 452 360 L 452 352", ""],
+      ].map(([d], i) => (
+        <path
+          key={i}
+          d={d as string}
+          stroke="oklch(0.86 0.16 290)"
+          strokeWidth="0.9"
+          strokeOpacity="0.7"
+          fill="none"
+          strokeLinecap="round"
+        />
+      ))}
+
+      {/* Car body segments */}
+      {segments.map((seg, i) => (
+        <motion.path
+          key={i}
+          d={seg.d}
+          stroke={seg.color || stroke}
+          strokeWidth={seg.w ?? 0.8}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+          style={{ strokeDasharray: seg.len, strokeDashoffset: reduce ? 0 : seg.len }}
+          animate={
+            reduce
+              ? undefined
+              : {
+                  strokeDashoffset: [seg.len, 0, 0, seg.len],
+                  opacity: [0.2, 1, 1, 0.2],
+                }
+          }
+          transition={
+            reduce
+              ? undefined
+              : {
+                  duration: 6.5,
+                  times: [0, 0.35, 0.85, 1],
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                  delay: baseDelay + i * stagger,
+                }
+          }
+        />
+      ))}
+
+      {/* Wheels */}
+      {wheels.map((w, i) => {
+        const c = 2 * Math.PI * w.r;
+        return (
+          <g key={i}>
+            <motion.circle
+              cx={w.cx}
+              cy={w.cy}
+              r={w.r}
+              stroke={stroke}
+              strokeWidth="0.9"
+              fill="none"
+              style={{ strokeDasharray: c, strokeDashoffset: reduce ? 0 : c }}
+              animate={
+                reduce
+                  ? undefined
+                  : { strokeDashoffset: [c, 0, 0, c], opacity: [0.2, 1, 1, 0.2] }
+              }
+              transition={
+                reduce
+                  ? undefined
+                  : {
+                      duration: 6.5,
+                      times: [0, 0.45, 0.85, 1],
+                      ease: "easeInOut",
+                      repeat: Infinity,
+                      delay: 1.4 + i * 0.2,
+                    }
+              }
+            />
+            <circle cx={w.cx} cy={w.cy} r={w.r * 0.45} stroke={strokeSoft} strokeWidth="0.5" strokeOpacity="0.6" fill="none" />
+            <circle cx={w.cx} cy={w.cy} r="1.4" fill={stroke} />
+          </g>
+        );
+      })}
+
+      {/* Pulsing highlight nodes */}
+      {nodes.map((n, i) => (
+        <motion.g
+          key={i}
+          animate={
+            reduce
+              ? undefined
+              : { opacity: [0, 1, 1, 0] }
+          }
+          transition={
+            reduce
+              ? undefined
+              : {
+                  duration: 6.5,
+                  times: [0, n.delay / 6.5, 0.9, 1],
+                  repeat: Infinity,
+                }
+          }
+        >
+          <circle cx={n.cx} cy={n.cy} r="3.5" fill="none" stroke={stroke} strokeWidth="0.6" strokeOpacity="0.7" />
+          <circle cx={n.cx} cy={n.cy} r="1.4" fill="oklch(0.95 0.14 290)" />
+          <motion.circle
+            cx={n.cx}
+            cy={n.cy}
+            r="3.5"
+            fill="none"
+            stroke={stroke}
+            strokeWidth="0.6"
+            animate={reduce ? undefined : { r: [3.5, 9], opacity: [0.7, 0] }}
+            transition={
+              reduce
+                ? undefined
+                : { duration: 1.8, repeat: Infinity, delay: i * 0.4, ease: "easeOut" }
+            }
+          />
+        </motion.g>
+      ))}
+
+      {/* Subtle ground reflection */}
+      <line
+        x1="170"
+        y1="368"
+        x2="430"
+        y2="368"
+        stroke="oklch(0.78 0.14 290)"
+        strokeWidth="0.4"
+        strokeOpacity="0.4"
+        strokeDasharray="1 3"
+      />
+    </g>
   );
 }
