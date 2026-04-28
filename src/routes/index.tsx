@@ -131,7 +131,7 @@ function Marquee() {
 function Comparison() {
   const ref = useReveal<HTMLElement>();
   return (
-    <section ref={ref} id="work" className="border-t border-border bg-surface py-24 md:py-36">
+    <section ref={ref} id="work" className="cv-auto border-t border-border bg-surface py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-12 grid gap-8 md:grid-cols-2 md:items-end reveal">
           <div>
@@ -188,7 +188,7 @@ function Features() {
   ];
 
   return (
-    <section ref={ref} className="border-t border-border py-24 md:py-36">
+    <section ref={ref} className="cv-auto border-t border-border py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-16 max-w-2xl reveal">
           <div className="mb-4 font-display text-sm tracking-[0.3em] text-ember">
@@ -233,7 +233,7 @@ function Process() {
     { k: "04", t: "Final delivery", d: "High-resolution files, ready for any channel." },
   ];
   return (
-    <section ref={ref} id="process" className="border-t border-border bg-surface py-24 md:py-36">
+    <section ref={ref} id="process" className="cv-auto border-t border-border bg-surface py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-16 grid gap-8 md:grid-cols-2 md:items-end reveal">
           <h2 className="font-display text-5xl leading-none tracking-tight md:text-7xl">
@@ -276,7 +276,7 @@ function CTA() {
     <section
       ref={ref}
       id="contact"
-      className="relative grain overflow-hidden border-t border-border py-24 md:py-36"
+      className="cv-auto relative grain overflow-hidden border-t border-border py-24 md:py-36"
     >
       <div
         className="absolute inset-0 bg-cover bg-center opacity-25 animate-slow-zoom"

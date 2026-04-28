@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import carHologram from "@/assets/car-hologram.png";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 /**
  * JarvisHUD — a clean, minimal AI HUD overlay.
@@ -15,16 +16,34 @@ const STAGES = [
 
 export function JarvisHUD({ className = "" }: { className?: string }) {
   const reduce = useReducedMotion();
+  const isMobile = useIsMobile();
   const [stage, setStage] = useState(0);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(true);
+
+  // Pause all animations when HUD scrolls offscreen — major scroll-perf win.
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: "100px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const animate = !reduce && inView;
 
   useEffect(() => {
-    if (reduce) return;
+    if (!animate) return;
     const id = setInterval(() => setStage((s) => (s + 1) % STAGES.length), 2200);
     return () => clearInterval(id);
-  }, [reduce]);
+  }, [animate]);
 
   return (
     <div
+      ref={rootRef}
       className={`pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden ${className}`}
       aria-hidden="true"
     >
@@ -49,10 +68,13 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
             filter: "drop-shadow(0 0 30px oklch(0.78 0.22 290 / 0.55)) brightness(1.1) contrast(1.05)",
             maskImage: "radial-gradient(ellipse 60% 70% at 50% 50%, black 55%, transparent 100%)",
             WebkitMaskImage: "radial-gradient(ellipse 60% 70% at 50% 50%, black 55%, transparent 100%)",
+            willChange: "transform, opacity",
           }}
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
+          loading="lazy"
+          decoding="async"
         />
         <svg
           viewBox="0 0 600 600"
@@ -80,14 +102,15 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
 
           {/* Outer ring with tick marks */}
           <motion.g
-            style={{ transformOrigin: "300px 300px" }}
-            animate={reduce ? undefined : { rotate: 360 }}
-            transition={{ duration: 80, ease: "linear", repeat: Infinity }}
+            style={{ transformOrigin: "300px 300px", willChange: "transform" }}
+            animate={animate ? { rotate: 360 } : { rotate: 0 }}
+            transition={animate ? { duration: 80, ease: "linear", repeat: Infinity } : { duration: 0 }}
           >
             <circle cx="300" cy="300" r="270" stroke="url(#hud-stroke)" strokeWidth="0.6" strokeOpacity="0.6" />
-            {Array.from({ length: 72 }).map((_, i) => {
+            {Array.from({ length: isMobile ? 36 : 72 }).map((_, i) => {
               const long = i % 6 === 0;
-              const a = (i / 72) * Math.PI * 2;
+              const total = isMobile ? 36 : 72;
+              const a = (i / total) * Math.PI * 2;
               const r1 = 270;
               const r2 = long ? 256 : 263;
               const x1 = 300 + Math.cos(a) * r1;
@@ -111,9 +134,9 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
 
           {/* Counter-rotating thinner ring */}
           <motion.g
-            style={{ transformOrigin: "300px 300px" }}
-            animate={reduce ? undefined : { rotate: -360 }}
-            transition={{ duration: 120, ease: "linear", repeat: Infinity }}
+            style={{ transformOrigin: "300px 300px", willChange: "transform" }}
+            animate={animate ? { rotate: -360 } : { rotate: 0 }}
+            transition={animate ? { duration: 120, ease: "linear", repeat: Infinity } : { duration: 0 }}
           >
             <circle cx="300" cy="300" r="230" stroke="oklch(0.72 0.16 280)" strokeWidth="0.4" strokeOpacity="0.35" strokeDasharray="2 6" />
             {/* Four corner brackets */}
@@ -132,9 +155,9 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
           {/* Mid ring with sweeping arc */}
           <circle cx="300" cy="300" r="180" stroke="oklch(0.78 0.16 290)" strokeWidth="0.5" strokeOpacity="0.45" />
           <motion.g
-            style={{ transformOrigin: "300px 300px" }}
-            animate={reduce ? undefined : { rotate: 360 }}
-            transition={{ duration: 6, ease: "linear", repeat: Infinity }}
+            style={{ transformOrigin: "300px 300px", willChange: "transform" }}
+            animate={animate ? { rotate: 360 } : { rotate: 0 }}
+            transition={animate ? { duration: 6, ease: "linear", repeat: Infinity } : { duration: 0 }}
           >
             <path
               d="M 300 120 A 180 180 0 0 1 456 240"
@@ -145,7 +168,7 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
           </motion.g>
 
           {/* Wireframe car blueprint (side profile) */}
-          <WireframeCar reduce={!!reduce} />
+          <WireframeCar reduce={!animate} isMobile={isMobile} />
 
           {/* Connector lines to data labels (top-right & bottom-left) */}
           <g stroke="oklch(0.78 0.16 290)" strokeWidth="0.6" strokeOpacity="0.55">
@@ -239,7 +262,7 @@ function DataLabel({
  * sequence, producing a "progressively drawn" hologram effect. Nodes pulse
  * at key body points (hood, roof, doors, wheels) once their segment is in.
  */
-export function WireframeCar({ reduce }: { reduce: boolean }) {
+export function WireframeCar({ reduce, isMobile = false }: { reduce: boolean; isMobile?: boolean }) {
   // Pure HUD overlay around the hologram image: guide brackets, bounding
   // boxes on car parts, sweeping scan line, holographic projection platform.
   const stroke = "oklch(0.88 0.16 290)";
@@ -302,7 +325,7 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
       ))}
 
       {/* Vertical scan beam sweeping left → right across the car */}
-      {!reduce && (
+      {!reduce && !isMobile && (
         <motion.g
           initial={{ x: -440 }}
           animate={{ x: 0 }}
@@ -347,7 +370,7 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
             <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={stroke} strokeWidth="0.5" strokeOpacity={i % 9 === 0 ? 0.9 : 0.4} />
           );
         })}
-        {!reduce &&
+        {!reduce && !isMobile &&
           [-160, -100, -40, 40, 100, 160].map((dx, i) => (
             <motion.line
               key={i}
