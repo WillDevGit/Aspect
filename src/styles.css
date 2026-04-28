@@ -448,3 +448,19 @@
     transition: none !important;
   }
 }
+
+/* === Scroll perf: skip rendering work for offscreen sections === */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
+}
+
+/* On mobile, drop the heaviest continuously-running animations to keep 60fps. */
+@media (max-width: 767px) {
+  .animate-slow-zoom,
+  .animate-haze,
+  .animate-ember-pulse,
+  .speed-grid {
+    animation: none !important;
+  }
+}
