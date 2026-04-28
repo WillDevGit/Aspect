@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import carHologram from "@/assets/car-hologram.png";
 
 /**
  * JarvisHUD — a clean, minimal AI HUD overlay.
@@ -38,6 +39,17 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
 
       {/* HUD core */}
       <div className="relative aspect-square h-[min(78vmin,720px)] w-[min(78vmin,720px)]">
+        {/* Car hologram (real wireframe car image) */}
+        <motion.img
+          src={carHologram}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-1/2 w-[78%] -translate-x-1/2 -translate-y-[58%] select-none"
+          style={{ filter: "drop-shadow(0 0 24px oklch(0.78 0.22 290 / 0.55))" }}
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        />
         <svg
           viewBox="0 0 600 600"
           className="absolute inset-0 h-full w-full"
