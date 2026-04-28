@@ -4,6 +4,7 @@ import heroBg from "@/assets/hero-bg.jpg";
 import { MagneticButton } from "@/components/MagneticButton";
 import { Particles } from "@/components/Particles";
 import { playRevBurst } from "@/components/EngineAudio";
+import { LeadNetworkCanvas } from "@/components/LeadNetworkCanvas";
 
 /**
  * Scroll-driven cinematic hero.
@@ -119,6 +120,11 @@ export function ScrollHero() {
 
         <Particles count={20} />
         <div className="beam-sweep" />
+
+        {/* Lead-generation network animation (overlay, mix-blend for cinematic feel) */}
+        <div className="pointer-events-none absolute inset-0 mix-blend-screen opacity-80">
+          <LeadNetworkCanvas />
+        </div>
 
         {/* Foreground content */}
         <div className="relative z-10 mx-auto grid h-full max-w-7xl grid-cols-1 gap-8 px-6 pt-32 pb-16 md:grid-cols-12 md:px-12">
