@@ -1,10 +1,8 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import heroBg from "@/assets/hero-bg.jpg";
 import { MagneticButton } from "@/components/MagneticButton";
-import { Particles } from "@/components/Particles";
 import { playRevBurst } from "@/components/EngineAudio";
-import { CarTransformHero } from "@/components/CarTransformHero";
+import { JarvisHUD } from "@/components/JarvisHUD";
 
 /**
  * Scroll-driven cinematic hero.
@@ -25,25 +23,9 @@ export function ScrollHero() {
   // If reduced motion, render a static version
   const p = reduce ? null : scrollYProgress;
 
-  // Headlights: visible 0 → 0.25, fade out as car appears
-  const headlightOpacity = useTransform(scrollYProgress, [0, 0.05, 0.18, 0.32], [0, 1, 1, 0]);
-  const headlightScale = useTransform(scrollYProgress, [0, 0.18, 0.32], [0.6, 1.1, 1.6]);
-
-  // Light beam sweep: 0.12 → 0.32
-  const beamOpacity = useTransform(scrollYProgress, [0.1, 0.18, 0.3, 0.34], [0, 0.85, 0.6, 0]);
-  const beamX = useTransform(scrollYProgress, [0.1, 0.34], ["-40%", "120%"]);
-
-  // Car reveal: opacity 0 at 0.18 → 1 at 0.45
-  const carOpacity = useTransform(scrollYProgress, [0.18, 0.4, 0.55], [0, 0.85, 1]);
-  // Camera push (upward) + slight scale
-  const carScale = useTransform(scrollYProgress, [0.18, 0.55, 0.85], [1.18, 1.04, 1]);
-  const carY = useTransform(scrollYProgress, [0.18, 0.55, 0.85], ["6%", "0%", "-2%"]);
-  const carBlur = useTransform(scrollYProgress, [0.18, 0.45], [12, 0]);
-
-  // Background dim → reveal
-  const bgOverlay = useTransform(scrollYProgress, [0, 0.45, 1], [1, 0.55, 0.4]);
-
-  const carFilter = useTransform(carBlur, (b) => `blur(${b}px) contrast(1.1) saturate(1.05)`);
+  // HUD subtle parallax/fade as user scrolls past hero
+  const hudOpacity = useTransform(scrollYProgress, [0, 0.5, 0.95], [1, 0.85, 0.2]);
+  const hudScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
   const hintOpacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
 
   // Headline stays put while we scroll over the hero
@@ -66,65 +48,20 @@ export function ScrollHero() {
         {/* Layer 1 — pure black base */}
         <div className="absolute inset-0 bg-black" />
 
-        {/* Layer 2 — background scene fades in with scroll */}
-        <motion.div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${heroBg})`,
-            scale: p ? carScale : 1,
-            y: p ? carY : 0,
-            opacity: p ? carOpacity : 1,
-            filter: p ? carFilter : "contrast(1.1) saturate(1.05)",
-          }}
-        />
-
-        {/* Layer 3 — heavy black overlay that lifts on scroll */}
-        <motion.div
-          className="absolute inset-0 bg-black"
-          style={{ opacity: p ? bgOverlay : 0.45 }}
-        />
-
-        {/* Layer 4 — left-edge gradient for legibility */}
+        {/* Layer 2 — left-edge gradient for legibility */}
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.55)_25%,rgba(0,0,0,0.15)_45%,transparent_60%)]" />
 
-        {/* Layer 5 — vignette + bottom fade */}
+        {/* Layer 3 — vignette + bottom fade */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.7)_100%)]" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black to-transparent" />
 
-        {/* Layer 6 — headlights (two glowing dots) */}
-        {!reduce && (
-          <motion.div
-            className="pointer-events-none absolute inset-0 flex items-center justify-center"
-            style={{ opacity: headlightOpacity }}
-          >
-            <motion.div className="relative" style={{ scale: headlightScale }}>
-              <Headlight side="left" />
-              <Headlight side="right" />
-            </motion.div>
-          </motion.div>
-        )}
-
-        {/* Layer 7 — light beam sweep */}
-        {!reduce && (
-          <motion.div
-            className="pointer-events-none absolute top-1/2 left-0 h-[180px] w-[60%] -translate-y-1/2 mix-blend-screen"
-            style={{
-              opacity: beamOpacity,
-              x: beamX,
-              background:
-                "linear-gradient(90deg, transparent, oklch(0.92 0.08 315 / 0.85), oklch(0.78 0.22 315 / 0.4), transparent)",
-              filter: "blur(20px)",
-            }}
-          />
-        )}
-
-        <Particles count={20} />
-        <div className="beam-sweep" />
-
-        {/* Instant car transformation animation */}
-        <div className="pointer-events-none absolute inset-0">
-          <CarTransformHero />
-        </div>
+        {/* Layer 4 — Jarvis-style AI HUD */}
+        <motion.div
+          className="absolute inset-0"
+          style={p ? { opacity: hudOpacity, scale: hudScale } : undefined}
+        >
+          <JarvisHUD />
+        </motion.div>
 
         {/* Foreground content */}
         <div className="relative z-10 mx-auto grid h-full max-w-7xl grid-cols-1 gap-8 px-6 pt-32 pb-16 md:grid-cols-12 md:px-12">
@@ -213,19 +150,6 @@ export function ScrollHero() {
         )}
       </div>
     </section>
-  );
-}
-
-function Headlight({ side }: { side: "left" | "right" }) {
-  return (
-    <div
-      className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-      style={{
-        [side === "left" ? "right" : "left"]: "60px",
-        boxShadow:
-          "0 0 18px 4px rgba(255,255,255,0.95), 0 0 60px 18px oklch(0.78 0.22 315 / 0.6), 0 0 180px 60px oklch(0.62 0.25 305 / 0.35)",
-      }}
-    />
   );
 }
 
