@@ -458,10 +458,9 @@
 }
 
 /* === Scroll perf: skip rendering work for offscreen sections === */
-.cv-auto {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 800px;
-}
+/* Note: content-visibility was removed because it caused jumpy scroll
+   near section boundaries. Animations are paused via IntersectionObserver. */
+.cv-auto { /* no-op kept for class compatibility */ }
 
 /* On mobile, drop the heaviest continuously-running animations to keep 60fps. */
 @media (max-width: 767px) {
