@@ -44,8 +44,12 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
           src={carHologram}
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 w-[82%] -translate-x-1/2 -translate-y-[58%] select-none mix-blend-screen"
-          style={{ filter: "drop-shadow(0 0 30px oklch(0.78 0.22 290 / 0.55)) brightness(1.15) contrast(1.1)" }}
+          className="pointer-events-none absolute left-1/2 top-1/2 w-[82%] -translate-x-1/2 -translate-y-[58%] select-none"
+          style={{
+            filter: "drop-shadow(0 0 30px oklch(0.78 0.22 290 / 0.55)) brightness(1.1) contrast(1.05)",
+            maskImage: "radial-gradient(ellipse 60% 70% at 50% 50%, black 55%, transparent 100%)",
+            WebkitMaskImage: "radial-gradient(ellipse 60% 70% at 50% 50%, black 55%, transparent 100%)",
+          }}
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
