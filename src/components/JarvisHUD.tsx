@@ -237,7 +237,6 @@ function DataLabel({
  * at key body points (hood, roof, doors, wheels) once their segment is in.
  */
 export function WireframeCar({ reduce }: { reduce: boolean }) {
-  const _ = 0; // anchor for export
   // Coordinate system: 600x600 viewBox. Car centered at (300, 320),
   // ~440px wide × ~150px tall — large, unmistakably a car.
   const stroke = "oklch(0.88 0.16 290)";
