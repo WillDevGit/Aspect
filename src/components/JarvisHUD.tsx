@@ -236,133 +236,32 @@ function DataLabel({
  * at key body points (hood, roof, doors, wheels) once their segment is in.
  */
 export function WireframeCar({ reduce }: { reduce: boolean }) {
-  // Coordinate system: 600x600 viewBox. Car centered at (300, 320),
-  // ~440px wide × ~150px tall — large, unmistakably a car.
+  // Pure HUD overlay around the hologram image: guide brackets, bounding
+  // boxes on car parts, sweeping scan line, holographic projection platform.
   const stroke = "oklch(0.88 0.16 290)";
   const strokeSoft = "oklch(0.78 0.14 280)";
 
-  // Full sports-car side silhouette as a single closed path (filled faintly + outlined).
-  const SILHOUETTE =
-    "M 92 360 " +
-    "L 108 340 L 132 332 " +                       // front bumper / lower
-    "L 152 326 L 176 314 " +                        // hood front
-    "L 208 296 L 240 282 " +                        // hood rise to A-pillar
-    "L 268 258 L 332 252 " +                        // roof line
-    "L 376 274 L 412 296 " +                        // C-pillar to rear deck
-    "L 448 308 L 484 318 " +                        // trunk / rear quarter
-    "L 504 326 L 512 344 L 508 360 " +              // rear bumper
-    "L 470 360 " +                                  // rear bumper bottom
-    "A 38 38 0 0 0 394 360 " +                      // rear wheel arch (cut up)
-    "L 240 360 " +
-    "A 38 38 0 0 0 164 360 " +                      // front wheel arch (cut up)
-    "L 92 360 Z";
-
-  // Greenhouse (windows) — second filled shape on top
-  const GREENHOUSE =
-    "M 244 282 L 268 258 L 332 252 L 372 272 L 360 286 L 256 286 Z";
-
-  // Structural detail lines
-  const DETAILS: { d: string; w?: number; soft?: boolean }[] = [
-    // Door cut
-    { d: "M 220 300 L 220 358", w: 0.7, soft: true },
-    // Door handle line
-    { d: "M 286 296 L 348 294", w: 0.7, soft: true },
-    // Hood seam
-    { d: "M 176 314 L 244 296", w: 0.6, soft: true },
-    // Side body crease
-    { d: "M 144 332 L 500 326", w: 0.6, soft: true },
-    // Rocker panel
-    { d: "M 200 360 L 380 360", w: 0.5, soft: true },
-    // Window cross-frame
-    { d: "M 304 252 L 304 286", w: 0.5, soft: true },
-    // Front headlight
-    { d: "M 108 340 L 138 336", w: 1.0 },
-    // Rear taillight
-    { d: "M 484 318 L 506 326", w: 1.0 },
-  ];
-
-  // Wheels
-  const wheels = [
-    { cx: 202, cy: 360, r: 38 },
-    { cx: 432, cy: 360, r: 38 },
-  ];
-
-  // Highlighted parts with bounding boxes + labels
+  // Coordinates calibrated to the car hologram image (centered ~300,290,
+  // ~440 wide × ~200 tall in the 600 viewBox).
   const parts = [
-    { x: 150, y: 296, w: 100, h: 24, label: "HOOD",   anchor: "M 250 308 L 296 230 L 360 230" },
-    { x: 244, y: 246, w: 132, h: 44, label: "GLASS",  anchor: "M 376 268 L 446 220 L 510 220" },
-    { x: 162, y: 320, w: 80,  h: 40, label: "WHEEL",  anchor: "M 162 360 L 116 408 L 92 408" },
-    { x: 392, y: 320, w: 80,  h: 40, label: "PANEL",  anchor: "M 472 340 L 520 408 L 540 408" },
+    // x, y, w, h on viewBox; anchor path ends at label x,y
+    { x: 138, y: 222, w: 240, h: 50, label: "HOOD",       anchor: "M 258 222 L 258 188 L 320 188" },
+    { x: 270, y: 200, w: 200, h: 64, label: "GLASS",      anchor: "M 470 218 L 520 178 L 588 178" },
+    { x: 132, y: 280, w: 110, h: 110, label: "WHEEL",     anchor: "M 132 332 L 78 380 L 30 380" },
+    { x: 388, y: 280, w: 110, h: 110, label: "WHEEL  R",  anchor: "M 498 332 L 552 380 L 590 380" },
+    { x: 196, y: 240, w: 250, h: 36, label: "SURFACE",    anchor: "M 446 252 L 520 252 L 590 252" },
   ];
 
   return (
     <g>
-      {/* Faint guide bracket frame around car */}
+      {/* Outer guide bracket frame around the car hologram */}
       {[
-        "M 80 232 L 70 232 L 70 244",
-        "M 520 232 L 530 232 L 530 244",
-        "M 80 388 L 70 388 L 70 376",
-        "M 520 388 L 530 388 L 530 376",
+        "M 80 192 L 70 192 L 70 204",
+        "M 520 192 L 530 192 L 530 204",
+        "M 80 398 L 70 398 L 70 386",
+        "M 520 398 L 530 398 L 530 386",
       ].map((d, i) => (
-        <path key={i} d={d} stroke={stroke} strokeWidth="0.9" strokeOpacity="0.6" fill="none" strokeLinecap="round" />
-      ))}
-
-      {/* Car silhouette — always visible */}
-      <path
-        d={SILHOUETTE}
-        fill="oklch(0.78 0.18 290 / 0.10)"
-        stroke={stroke}
-        strokeWidth="1.4"
-        strokeLinejoin="round"
-        strokeLinecap="round"
-      />
-      <path
-        d={GREENHOUSE}
-        fill="oklch(0.78 0.18 290 / 0.06)"
-        stroke={stroke}
-        strokeWidth="1.0"
-        strokeLinejoin="round"
-      />
-
-      {/* Detail lines */}
-      {DETAILS.map((d, i) => (
-        <path
-          key={i}
-          d={d.d}
-          stroke={d.soft ? strokeSoft : stroke}
-          strokeWidth={d.w ?? 0.7}
-          strokeOpacity={d.soft ? 0.55 : 0.85}
-          strokeLinecap="round"
-          fill="none"
-        />
-      ))}
-
-      {/* Wheels — outer rim + spokes */}
-      {wheels.map((w, i) => (
-        <g key={i}>
-          <circle cx={w.cx} cy={w.cy} r={w.r} stroke={stroke} strokeWidth="1.2" fill="oklch(0.12 0.02 290)" />
-          <circle cx={w.cx} cy={w.cy} r={w.r * 0.62} stroke={strokeSoft} strokeWidth="0.7" fill="none" strokeOpacity="0.7" />
-          <circle cx={w.cx} cy={w.cy} r={w.r * 0.22} stroke={stroke} strokeWidth="0.8" fill="none" />
-          <motion.g
-            style={{ transformOrigin: `${w.cx}px ${w.cy}px` }}
-            animate={reduce ? undefined : { rotate: 360 }}
-            transition={reduce ? undefined : { duration: 14 + i * 2, ease: "linear", repeat: Infinity }}
-          >
-            {[0, 60, 120, 180, 240, 300].map((deg) => (
-              <line
-                key={deg}
-                x1={w.cx}
-                y1={w.cy}
-                x2={w.cx + Math.cos((deg * Math.PI) / 180) * w.r * 0.55}
-                y2={w.cy + Math.sin((deg * Math.PI) / 180) * w.r * 0.55}
-                stroke={strokeSoft}
-                strokeWidth="0.6"
-                strokeOpacity="0.6"
-              />
-            ))}
-          </motion.g>
-          <circle cx={w.cx} cy={w.cy} r="2" fill={stroke} />
-        </g>
+        <path key={i} d={d} stroke={stroke} strokeWidth="0.9" strokeOpacity="0.7" fill="none" strokeLinecap="round" />
       ))}
 
       {/* Bounding boxes on parts + connector + label */}
@@ -374,70 +273,56 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
           transition={
             reduce
               ? undefined
-              : { duration: 4.5, times: [0, 0.2, 0.5, 0.8, 1], delay: i * 0.6, repeat: Infinity }
+              : { duration: 4.5, times: [0, 0.2, 0.5, 0.8, 1], delay: i * 0.5, repeat: Infinity }
           }
         >
-          <rect
-            x={p.x}
-            y={p.y}
-            width={p.w}
-            height={p.h}
-            stroke={stroke}
-            strokeWidth="0.8"
-            strokeOpacity="0.9"
-            fill="oklch(0.78 0.18 290 / 0.05)"
-            rx="2"
-          />
-          {/* Bracket corners */}
+          {/* Bracket corners only — no full rectangle, keeps it minimal */}
           {[
-            [p.x, p.y + 6, p.x, p.y, p.x + 6, p.y],
-            [p.x + p.w - 6, p.y, p.x + p.w, p.y, p.x + p.w, p.y + 6],
-            [p.x, p.y + p.h - 6, p.x, p.y + p.h, p.x + 6, p.y + p.h],
-            [p.x + p.w - 6, p.y + p.h, p.x + p.w, p.y + p.h, p.x + p.w, p.y + p.h - 6],
+            [p.x, p.y + 8, p.x, p.y, p.x + 8, p.y],
+            [p.x + p.w - 8, p.y, p.x + p.w, p.y, p.x + p.w, p.y + 8],
+            [p.x, p.y + p.h - 8, p.x, p.y + p.h, p.x + 8, p.y + p.h],
+            [p.x + p.w - 8, p.y + p.h, p.x + p.w, p.y + p.h, p.x + p.w, p.y + p.h - 8],
           ].map((c, j) => (
             <path
               key={j}
               d={`M ${c[0]} ${c[1]} L ${c[2]} ${c[3]} L ${c[4]} ${c[5]}`}
               stroke={stroke}
-              strokeWidth="1.4"
+              strokeWidth="1.3"
               fill="none"
               strokeLinecap="round"
             />
           ))}
-          {/* Anchor line out to label */}
           <path d={p.anchor} stroke={strokeSoft} strokeWidth="0.6" strokeOpacity="0.7" fill="none" />
-          {/* Label text on the anchor end */}
           <PartLabel anchor={p.anchor} label={p.label} />
         </motion.g>
       ))}
 
-      {/* Scan line sweeping left → right across the car */}
+      {/* Vertical scan beam sweeping left → right across the car */}
       {!reduce && (
         <motion.g
           initial={{ x: -440 }}
           animate={{ x: 0 }}
-          transition={{ duration: 3.2, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+          transition={{ duration: 3.6, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
         >
           <defs>
             <linearGradient id="scan-vertical" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stopColor="oklch(0.85 0.18 290)" stopOpacity="0" />
-              <stop offset="50%" stopColor="oklch(0.92 0.18 290)" stopOpacity="0.85" />
+              <stop offset="50%" stopColor="oklch(0.95 0.18 290)" stopOpacity="0.9" />
               <stop offset="100%" stopColor="oklch(0.85 0.18 290)" stopOpacity="0" />
             </linearGradient>
           </defs>
-          <rect x="80" y="232" width="14" height="160" fill="url(#scan-vertical)" />
-          <line x1="87" y1="232" x2="87" y2="392" stroke="oklch(0.95 0.18 290)" strokeWidth="0.8" strokeOpacity="0.9" />
+          <rect x="80" y="192" width="14" height="206" fill="url(#scan-vertical)" />
+          <line x1="87" y1="192" x2="87" y2="398" stroke="oklch(0.97 0.18 290)" strokeWidth="0.8" strokeOpacity="0.95" />
         </motion.g>
       )}
 
       {/* Holographic projection platform under the car */}
       <g>
-        {/* Concentric ellipses suggesting a 3D disc */}
         {[0, 1, 2, 3].map((i) => (
           <ellipse
             key={i}
             cx="300"
-            cy="408"
+            cy="426"
             rx={210 - i * 40}
             ry={(210 - i * 40) * 0.16}
             stroke={i === 0 ? stroke : strokeSoft}
@@ -447,36 +332,25 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
             strokeDasharray={i % 2 ? "3 4" : undefined}
           />
         ))}
-        {/* Tiny tick markers around outer ring */}
         {Array.from({ length: 36 }).map((_, i) => {
           const a = (i / 36) * Math.PI * 2;
           const rx = 210, ry = 210 * 0.16;
           const x1 = 300 + Math.cos(a) * rx;
-          const y1 = 408 + Math.sin(a) * ry;
+          const y1 = 426 + Math.sin(a) * ry;
           const x2 = 300 + Math.cos(a) * (rx + 4);
-          const y2 = 408 + Math.sin(a) * (ry + 0.6);
+          const y2 = 426 + Math.sin(a) * (ry + 0.6);
           return (
-            <line
-              key={i}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke={stroke}
-              strokeWidth="0.5"
-              strokeOpacity={i % 9 === 0 ? 0.9 : 0.4}
-            />
+            <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={stroke} strokeWidth="0.5" strokeOpacity={i % 9 === 0 ? 0.9 : 0.4} />
           );
         })}
-        {/* Vertical light pillars rising from the disc */}
         {!reduce &&
           [-160, -100, -40, 40, 100, 160].map((dx, i) => (
             <motion.line
               key={i}
               x1={300 + dx}
-              y1={408}
+              y1={426}
               x2={300 + dx}
-              y2={368}
+              y2={398}
               stroke="oklch(0.92 0.16 290)"
               strokeWidth="0.7"
               strokeLinecap="round"
@@ -484,14 +358,7 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
               transition={{ duration: 2.4, delay: i * 0.18, repeat: Infinity, ease: "easeInOut" }}
             />
           ))}
-        {/* Soft glow under the car */}
-        <ellipse
-          cx="300"
-          cy="408"
-          rx="180"
-          ry="22"
-          fill="oklch(0.78 0.20 290 / 0.18)"
-        />
+        <ellipse cx="300" cy="426" rx="180" ry="22" fill="oklch(0.78 0.20 290 / 0.18)" />
       </g>
     </g>
   );
