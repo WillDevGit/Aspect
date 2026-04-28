@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { MagneticButton } from "@/components/MagneticButton";
-import { playRevBurst } from "@/components/EngineAudio";
 import { JarvisHUD } from "@/components/JarvisHUD";
 
 /**
@@ -97,7 +96,7 @@ export function ScrollHero() {
               >
                 <span
                   className="relative z-10 inline-flex items-center gap-3"
-                  onClick={() => playRevBurst()}
+                  onClick={() => {}}
                 >
                   GET IN TOUCH <span aria-hidden>→</span>
                 </span>
