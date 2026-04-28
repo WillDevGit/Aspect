@@ -4,7 +4,7 @@ import heroBg from "@/assets/hero-bg.jpg";
 import { MagneticButton } from "@/components/MagneticButton";
 import { Particles } from "@/components/Particles";
 import { playRevBurst } from "@/components/EngineAudio";
-import { LeadNetworkCanvas } from "@/components/LeadNetworkCanvas";
+import { CarTransformHero } from "@/components/CarTransformHero";
 
 /**
  * Scroll-driven cinematic hero.
@@ -121,9 +121,9 @@ export function ScrollHero() {
         <Particles count={20} />
         <div className="beam-sweep" />
 
-        {/* Lead-generation network animation (overlay, mix-blend for cinematic feel) */}
-        <div className="pointer-events-none absolute inset-0 mix-blend-screen opacity-80">
-          <LeadNetworkCanvas />
+        {/* Instant car transformation animation */}
+        <div className="pointer-events-none absolute inset-0">
+          <CarTransformHero />
         </div>
 
         {/* Foreground content */}
