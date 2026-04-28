@@ -7,11 +7,9 @@ import { motion, useReducedMotion } from "framer-motion";
  * that cycle through scan stages. Pure SVG + Framer Motion. Lightweight.
  */
 const STAGES = [
-  "Surface mapped",
-  "Geometry analyzed",
+  "Surface integrity: OK",
+  "Paint quality: Low",
   "Enhancement ready",
-  "Reflections calibrated",
-  "Render complete",
 ];
 
 export function JarvisHUD({ className = "" }: { className?: string }) {
