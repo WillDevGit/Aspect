@@ -262,7 +262,7 @@ function DataLabel({
  * sequence, producing a "progressively drawn" hologram effect. Nodes pulse
  * at key body points (hood, roof, doors, wheels) once their segment is in.
  */
-export function WireframeCar({ reduce }: { reduce: boolean }) {
+export function WireframeCar({ reduce, isMobile = false }: { reduce: boolean; isMobile?: boolean }) {
   // Pure HUD overlay around the hologram image: guide brackets, bounding
   // boxes on car parts, sweeping scan line, holographic projection platform.
   const stroke = "oklch(0.88 0.16 290)";
@@ -325,7 +325,7 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
       ))}
 
       {/* Vertical scan beam sweeping left → right across the car */}
-      {!reduce && (
+      {!reduce && !isMobile && (
         <motion.g
           initial={{ x: -440 }}
           animate={{ x: 0 }}
@@ -370,7 +370,7 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
             <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={stroke} strokeWidth="0.5" strokeOpacity={i % 9 === 0 ? 0.9 : 0.4} />
           );
         })}
-        {!reduce &&
+        {!reduce && !isMobile &&
           [-160, -100, -40, 40, 100, 160].map((dx, i) => (
             <motion.line
               key={i}
