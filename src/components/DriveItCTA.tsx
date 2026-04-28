@@ -1,5 +1,4 @@
 import { useRef, type MouseEvent } from "react";
-import { playRevBurst } from "@/components/EngineAudio";
 
 /**
  * Full-screen black "DRIVE IT." section.
@@ -46,7 +45,6 @@ export function DriveItCTA() {
             ref={btnRef}
             href="mailto:aspecttdigital@gmail.com"
             onMouseMove={onMove}
-            onClick={() => playRevBurst()}
             className="liquid-btn group relative inline-flex items-center gap-4 overflow-hidden rounded-full border border-ember/60 px-12 py-5 font-display text-base tracking-[0.3em] text-foreground"
             data-cursor-label="START"
           >
