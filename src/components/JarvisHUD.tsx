@@ -357,12 +357,12 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
       {parts.map((p, i) => (
         <motion.g
           key={p.label}
-          initial={{ opacity: 0 }}
-          animate={reduce ? { opacity: 1 } : { opacity: [0, 1, 1, 0.35, 1] }}
+          initial={{ opacity: 0.55 }}
+          animate={reduce ? { opacity: 1 } : { opacity: [0.55, 1, 0.7, 1, 0.55] }}
           transition={
             reduce
               ? undefined
-              : { duration: 6, times: [0, 0.15, 0.6, 0.75, 1], delay: i * 0.4, repeat: Infinity }
+              : { duration: 4.5, times: [0, 0.2, 0.5, 0.8, 1], delay: i * 0.6, repeat: Infinity }
           }
         >
           <rect
