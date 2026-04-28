@@ -143,15 +143,8 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
             <path d="M 400 300 L 420 300" stroke="oklch(0.85 0.14 290)" strokeWidth="1" strokeLinecap="round" />
           </motion.g>
 
-          {/* Center crosshair */}
-          <g>
-            <circle cx="300" cy="300" r="46" stroke="oklch(0.82 0.16 290)" strokeWidth="0.6" strokeOpacity="0.7" />
-            <circle cx="300" cy="300" r="3" fill="oklch(0.92 0.14 290)" />
-            <line x1="270" y1="300" x2="290" y2="300" stroke="oklch(0.85 0.14 290)" strokeWidth="0.8" />
-            <line x1="310" y1="300" x2="330" y2="300" stroke="oklch(0.85 0.14 290)" strokeWidth="0.8" />
-            <line x1="300" y1="270" x2="300" y2="290" stroke="oklch(0.85 0.14 290)" strokeWidth="0.8" />
-            <line x1="300" y1="310" x2="300" y2="330" stroke="oklch(0.85 0.14 290)" strokeWidth="0.8" />
-          </g>
+          {/* Wireframe car blueprint (side profile) */}
+          <WireframeCar reduce={!!reduce} />
 
           {/* Connector lines to data labels (top-right & bottom-left) */}
           <g stroke="oklch(0.78 0.16 290)" strokeWidth="0.6" strokeOpacity="0.55">
@@ -175,7 +168,7 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
         <DataLabel position="top-left" title="SYS" value="ONLINE" dot />
 
         {/* Center label */}
-        <div className="absolute left-1/2 top-[58%] -translate-x-1/2 text-center">
+        <div className="absolute left-1/2 top-[68%] -translate-x-1/2 text-center">
           <div className="font-display text-[10px] tracking-[0.5em] text-foreground/70">
             A · S · P · E · C · T
           </div>
