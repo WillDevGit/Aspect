@@ -92,7 +92,7 @@ export function CarTransformHero({ className = "" }: { className?: string }) {
     const easeInOut = (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 
     function draw(now: number) {
-      if (!running || !ctx) return;
+      if (!running || !ctx || !canvas) return;
       const W = canvas.width, H = canvas.height;
       const t = ((now - start) % TOTAL);
       ctx.fillStyle = "#080808";
