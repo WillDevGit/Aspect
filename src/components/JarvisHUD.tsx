@@ -424,7 +424,7 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
   );
 }
 
-function PartLabel({ anchor, label }: { anchor: string; label: string }) {
+export function PartLabel({ anchor, label }: { anchor: string; label: string }) {
   // Extract last "x y" pair from path
   const tokens = anchor.trim().split(/\s+/);
   const y = Number(tokens[tokens.length - 1]);
