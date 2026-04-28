@@ -153,7 +153,7 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
         <DataLabel position="top-left" title="SYS" value="ONLINE" dot />
 
         {/* Center label below car */}
-        <div className="absolute left-1/2 top-[78%] -translate-x-1/2 text-center">
+        <div className="absolute left-1/2 top-[82%] -translate-x-1/2 text-center">
           <div className="font-display text-[10px] tracking-[0.5em] text-foreground/70">
             A · S · P · E · C · T
           </div>
