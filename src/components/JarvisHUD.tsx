@@ -436,3 +436,22 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
     </g>
   );
 }
+
+function PartLabel({ anchor, label }: { anchor: string; label: string }) {
+  // Extract last "x y" pair from path
+  const tokens = anchor.trim().split(/\s+/);
+  const y = Number(tokens[tokens.length - 1]);
+  const x = Number(tokens[tokens.length - 2]);
+  return (
+    <text
+      x={x}
+      y={y - 6}
+      fill="oklch(0.92 0.14 290)"
+      fontSize="9"
+      letterSpacing="3"
+      fontFamily="ui-sans-serif, system-ui"
+    >
+      {label}
+    </text>
+  );
+}
