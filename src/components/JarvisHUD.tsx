@@ -153,7 +153,7 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
         <DataLabel position="top-left" title="SYS" value="ONLINE" dot />
 
         {/* Center label below car */}
-        <div className="absolute left-1/2 top-[78%] -translate-x-1/2 text-center">
+        <div className="absolute left-1/2 top-[82%] -translate-x-1/2 text-center">
           <div className="font-display text-[10px] tracking-[0.5em] text-foreground/70">
             A · S · P · E · C · T
           </div>
@@ -279,8 +279,8 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
   const parts = [
     { x: 150, y: 296, w: 100, h: 24, label: "HOOD",   anchor: "M 250 308 L 296 230 L 360 230" },
     { x: 244, y: 246, w: 132, h: 44, label: "GLASS",  anchor: "M 376 268 L 446 220 L 510 220" },
-    { x: 162, y: 320, w: 80,  h: 40, label: "WHEEL",  anchor: "M 162 360 L 110 410 L 50 410" },
-    { x: 392, y: 320, w: 80,  h: 40, label: "PANEL",  anchor: "M 472 340 L 528 410 L 588 410" },
+    { x: 162, y: 320, w: 80,  h: 40, label: "WHEEL",  anchor: "M 162 360 L 116 408 L 92 408" },
+    { x: 392, y: 320, w: 80,  h: 40, label: "PANEL",  anchor: "M 472 340 L 520 408 L 540 408" },
   ];
 
   return (
@@ -357,12 +357,12 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
       {parts.map((p, i) => (
         <motion.g
           key={p.label}
-          initial={{ opacity: 0 }}
-          animate={reduce ? { opacity: 1 } : { opacity: [0, 1, 1, 0.35, 1] }}
+          initial={{ opacity: 0.55 }}
+          animate={reduce ? { opacity: 1 } : { opacity: [0.55, 1, 0.7, 1, 0.55] }}
           transition={
             reduce
               ? undefined
-              : { duration: 6, times: [0, 0.15, 0.6, 0.75, 1], delay: i * 0.4, repeat: Infinity }
+              : { duration: 4.5, times: [0, 0.2, 0.5, 0.8, 1], delay: i * 0.6, repeat: Infinity }
           }
         >
           <rect
@@ -418,8 +418,69 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
         </motion.g>
       )}
 
-      {/* Ground reflection */}
-      <line x1="80" y1="402" x2="520" y2="402" stroke={strokeSoft} strokeWidth="0.5" strokeOpacity="0.45" strokeDasharray="2 4" />
+      {/* Holographic projection platform under the car */}
+      <g>
+        {/* Concentric ellipses suggesting a 3D disc */}
+        {[0, 1, 2, 3].map((i) => (
+          <ellipse
+            key={i}
+            cx="300"
+            cy="408"
+            rx={210 - i * 40}
+            ry={(210 - i * 40) * 0.16}
+            stroke={i === 0 ? stroke : strokeSoft}
+            strokeWidth={i === 0 ? 0.9 : 0.5}
+            strokeOpacity={0.7 - i * 0.12}
+            fill="none"
+            strokeDasharray={i % 2 ? "3 4" : undefined}
+          />
+        ))}
+        {/* Tiny tick markers around outer ring */}
+        {Array.from({ length: 36 }).map((_, i) => {
+          const a = (i / 36) * Math.PI * 2;
+          const rx = 210, ry = 210 * 0.16;
+          const x1 = 300 + Math.cos(a) * rx;
+          const y1 = 408 + Math.sin(a) * ry;
+          const x2 = 300 + Math.cos(a) * (rx + 4);
+          const y2 = 408 + Math.sin(a) * (ry + 0.6);
+          return (
+            <line
+              key={i}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke={stroke}
+              strokeWidth="0.5"
+              strokeOpacity={i % 9 === 0 ? 0.9 : 0.4}
+            />
+          );
+        })}
+        {/* Vertical light pillars rising from the disc */}
+        {!reduce &&
+          [-160, -100, -40, 40, 100, 160].map((dx, i) => (
+            <motion.line
+              key={i}
+              x1={300 + dx}
+              y1={408}
+              x2={300 + dx}
+              y2={368}
+              stroke="oklch(0.92 0.16 290)"
+              strokeWidth="0.7"
+              strokeLinecap="round"
+              animate={{ opacity: [0.15, 0.85, 0.15] }}
+              transition={{ duration: 2.4, delay: i * 0.18, repeat: Infinity, ease: "easeInOut" }}
+            />
+          ))}
+        {/* Soft glow under the car */}
+        <ellipse
+          cx="300"
+          cy="408"
+          rx="180"
+          ry="22"
+          fill="oklch(0.78 0.20 290 / 0.18)"
+        />
+      </g>
     </g>
   );
 }
