@@ -279,8 +279,8 @@ export function WireframeCar({ reduce }: { reduce: boolean }) {
   const parts = [
     { x: 150, y: 296, w: 100, h: 24, label: "HOOD",   anchor: "M 250 308 L 296 230 L 360 230" },
     { x: 244, y: 246, w: 132, h: 44, label: "GLASS",  anchor: "M 376 268 L 446 220 L 510 220" },
-    { x: 162, y: 320, w: 80,  h: 40, label: "WHEEL",  anchor: "M 162 360 L 110 410 L 50 410" },
-    { x: 392, y: 320, w: 80,  h: 40, label: "PANEL",  anchor: "M 472 340 L 528 410 L 588 410" },
+    { x: 162, y: 320, w: 80,  h: 40, label: "WHEEL",  anchor: "M 162 360 L 116 408 L 92 408" },
+    { x: 392, y: 320, w: 80,  h: 40, label: "PANEL",  anchor: "M 472 340 L 520 408 L 540 408" },
   ];
 
   return (
