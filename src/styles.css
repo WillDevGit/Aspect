@@ -153,6 +153,14 @@
     border-color: var(--color-border);
   }
 
+  html, body {
+    /* Never trap scroll. Always allow native vertical scrolling. */
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+    touch-action: pan-y;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
