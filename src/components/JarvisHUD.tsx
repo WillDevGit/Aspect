@@ -238,7 +238,7 @@ function DataLabel({
  * sequence, producing a "progressively drawn" hologram effect. Nodes pulse
  * at key body points (hood, roof, doors, wheels) once their segment is in.
  */
-function WireframeCar({ reduce }: { reduce: boolean }) {
+export function WireframeCar({ reduce }: { reduce: boolean }) {
   // All paths share viewBox 0..600. Car is centered around (300, 300),
   // roughly 320 wide × 110 tall.
   const stroke = "oklch(0.86 0.16 290)";
