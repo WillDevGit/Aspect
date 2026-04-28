@@ -128,19 +128,6 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
             />
           </motion.g>
 
-          {/* Inner ring + crosshair */}
-          <circle cx="300" cy="300" r="120" stroke="oklch(0.78 0.16 290)" strokeWidth="0.5" strokeOpacity="0.5" />
-          <motion.g
-            style={{ transformOrigin: "300px 300px" }}
-            animate={reduce ? undefined : { rotate: -360 }}
-            transition={{ duration: 24, ease: "linear", repeat: Infinity }}
-          >
-            <path d="M 300 180 L 300 200" stroke="oklch(0.85 0.14 290)" strokeWidth="1" strokeLinecap="round" />
-            <path d="M 300 400 L 300 420" stroke="oklch(0.85 0.14 290)" strokeWidth="1" strokeLinecap="round" />
-            <path d="M 180 300 L 200 300" stroke="oklch(0.85 0.14 290)" strokeWidth="1" strokeLinecap="round" />
-            <path d="M 400 300 L 420 300" stroke="oklch(0.85 0.14 290)" strokeWidth="1" strokeLinecap="round" />
-          </motion.g>
-
           {/* Wireframe car blueprint (side profile) */}
           <WireframeCar reduce={!!reduce} />
 
@@ -165,8 +152,8 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
         <DataLabel position="bottom-left" title="MODEL" value="ASPECT.v3" />
         <DataLabel position="top-left" title="SYS" value="ONLINE" dot />
 
-        {/* Center label */}
-        <div className="absolute left-1/2 top-[68%] -translate-x-1/2 text-center">
+        {/* Center label below car */}
+        <div className="absolute left-1/2 top-[78%] -translate-x-1/2 text-center">
           <div className="font-display text-[10px] tracking-[0.5em] text-foreground/70">
             A · S · P · E · C · T
           </div>
