@@ -94,10 +94,7 @@ export function ScrollHero() {
                 href="mailto:aspecttdigital@gmail.com"
                 className="group relative overflow-hidden rounded-full border border-ember/60 bg-transparent px-9 py-4 text-center font-display text-sm tracking-[0.25em] text-foreground shadow-[0_0_30px_-5px_oklch(0.62_0.25_305_/_0.6)] transition hover:bg-ember/10"
               >
-                <span
-                  className="relative z-10 inline-flex items-center gap-3"
-                  onClick={() => {}}
-                >
+                <span className="relative z-10 inline-flex items-center gap-3">
                   GET IN TOUCH <span aria-hidden>→</span>
                 </span>
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
