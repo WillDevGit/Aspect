@@ -62,13 +62,13 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
       {!isMobile && <SidePanels animate={animate} stage={stage} />}
 
       {/* HUD core */}
-      <div className="relative aspect-square h-[min(78vmin,720px)] w-[min(78vmin,720px)]">
+      <div className="relative aspect-square h-[min(70vmin,640px)] w-[min(70vmin,640px)]">
         {/* Car hologram (real wireframe car image) */}
         <motion.img
           src={carHologram}
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 w-[82%] -translate-x-1/2 -translate-y-[68%] select-none"
+          className="pointer-events-none absolute left-1/2 top-1/2 w-[88%] -translate-x-1/2 -translate-y-[68%] select-none"
           style={{
             filter: "drop-shadow(0 0 30px oklch(0.78 0.22 290 / 0.55)) brightness(1.1) contrast(1.05)",
             maskImage: "radial-gradient(ellipse 60% 70% at 50% 50%, black 55%, transparent 100%)",
