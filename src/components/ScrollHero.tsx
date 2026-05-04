@@ -139,11 +139,33 @@ export function ScrollHero() {
         {/* Scroll hint */}
         {!reduce && (
           <motion.div
-            className="pointer-events-none absolute bottom-6 left-1/2 z-20 -translate-x-1/2 text-center"
+            className="pointer-events-none absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center pt-4 text-center"
             style={{ opacity: hintOpacity }}
           >
-            <div className="font-display text-[10px] tracking-[0.4em] text-ember-glow">SCROLL TO REVEAL</div>
-            <div className="mx-auto mt-2 h-8 w-px bg-gradient-to-b from-ember-glow to-transparent" />
+            <div
+              className="font-mono text-[11px] uppercase text-ember-glow"
+              style={{ letterSpacing: "0.15em" }}
+            >
+              Scroll to reveal
+            </div>
+            <motion.svg
+              width="14"
+              height="22"
+              viewBox="0 0 14 22"
+              className="mt-3 text-ember-glow"
+              animate={{ y: [0, 6, 0], opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity }}
+            >
+              <path
+                d="M2 4 L7 10 L12 4 M2 12 L7 18 L12 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </motion.svg>
+            <div className="mt-2 h-6 w-px bg-gradient-to-b from-ember-glow to-transparent" />
           </motion.div>
         )}
       </div>

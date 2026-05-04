@@ -62,13 +62,13 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
       {!isMobile && <SidePanels animate={animate} stage={stage} />}
 
       {/* HUD core */}
-      <div className="relative aspect-square h-[min(78vmin,720px)] w-[min(78vmin,720px)]">
+      <div className="relative aspect-square h-[min(70vmin,640px)] w-[min(70vmin,640px)]">
         {/* Car hologram (real wireframe car image) */}
         <motion.img
           src={carHologram}
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 w-[82%] -translate-x-1/2 -translate-y-[68%] select-none"
+          className="pointer-events-none absolute left-1/2 top-1/2 w-[88%] -translate-x-1/2 -translate-y-[68%] select-none"
           style={{
             filter: "drop-shadow(0 0 30px oklch(0.78 0.22 290 / 0.55)) brightness(1.1) contrast(1.05)",
             maskImage: "radial-gradient(ellipse 60% 70% at 50% 50%, black 55%, transparent 100%)",
@@ -178,26 +178,13 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
           {/* Telemetry block under the car — fills lower empty space */}
           <TelemetryBlock animate={animate} stage={stage} isMobile={isMobile} />
 
-          {/* Connector lines to data labels (top-right & bottom-left) */}
-          <g stroke="oklch(0.78 0.16 290)" strokeWidth="0.6" strokeOpacity="0.55">
-            <path d="M 470 170 L 520 130 L 590 130" />
-            <path d="M 130 430 L 80 470 L 10 470" />
-            <path d="M 470 430 L 520 470 L 590 470" />
-            <path d="M 130 170 L 80 130 L 10 130" />
-          </g>
-          <g fill="oklch(0.92 0.14 290)">
-            <circle cx="470" cy="170" r="2" />
-            <circle cx="130" cy="430" r="2" />
-            <circle cx="470" cy="430" r="2" />
-            <circle cx="130" cy="170" r="2" />
-          </g>
         </svg>
 
-        {/* Data labels (HTML, crisp text) */}
-        <DataLabel position="top-right" title="STATUS" value={STAGES[stage]} live />
-        <DataLabel position="bottom-right" title="OUTPUT" value="4096 × 2731" />
-        <DataLabel position="bottom-left" title="MODEL" value="ASPECT.v3" />
-        <DataLabel position="top-left" title="SYS" value="ONLINE" dot />
+        {/* Standardized status indicators — LABEL · VALUE monospace */}
+        <StatusTag position="top-left"     label="SYS"    value="ONLINE" dot />
+        <StatusTag position="top-right"    label="STATUS" value={STAGES[stage]} live />
+        <StatusTag position="bottom-left"  label="MODEL"  value="ASPECT.v3" />
+        <StatusTag position="bottom-right" label="OUTPUT" value="4096×2731" />
 
         {/* Center label below telemetry */}
         <div className="absolute left-1/2 top-[94%] -translate-x-1/2 text-center">
@@ -257,11 +244,15 @@ function TelemetryBlock({
       />
       <line x1="110" y1="470" x2="490" y2="470" stroke={strokeSoft} strokeWidth="0.4" strokeOpacity="0.5" />
 
-      {/* Section label */}
-      <text x="120" y="464" fill="oklch(0.92 0.14 290)" fontSize="8" letterSpacing="3">
-        TELEMETRY · LIVE
+      {/* Tier 1 — section title */}
+      <text x="120" y="464" fill="oklch(0.92 0.14 290)" fontSize="9" letterSpacing="3" fontFamily="ui-monospace, monospace">
+        TELEMETRY
       </text>
-      <circle cx="115" cy="461" r="2" fill="oklch(0.92 0.18 290)">
+      <text x="172" y="464" fill="#7F77DD" fontSize="9" letterSpacing="3">·</text>
+      <text x="180" y="464" fill="oklch(0.92 0.14 290)" fontSize="9" letterSpacing="3" fontFamily="ui-monospace, monospace">
+        LIVE
+      </text>
+      <circle cx="115" cy="461" r="2" fill="#7F77DD">
         {animate && <animate attributeName="opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite" />}
       </circle>
 
@@ -286,27 +277,33 @@ function TelemetryBlock({
         <line x1="0" y1="26" x2="364" y2="26" stroke={strokeSoft} strokeWidth="0.4" strokeOpacity="0.4" />
       </g>
 
-      {/* Dual progress bars */}
+      {/* Tier 2 — highlighted metrics with large numeric values */}
       <g transform="translate(118 522)">
-        <text x="0" y="0" fill="oklch(0.92 0.14 290)" fontSize="7" letterSpacing="2.5">
+        <text x="0" y="0" fill="oklch(0.92 0.14 290)" fillOpacity="0.6" fontSize="7" letterSpacing="2.5" fontFamily="ui-monospace, monospace">
           ENHANCEMENT
         </text>
-        <rect x="0" y="4" width="170" height="4" fill="oklch(0.3 0.05 290 / 0.6)" rx="1" />
-        <ProgressBar x={0} y={4} max={170} duration={5} animate={animate} />
+        <text x="0" y="18" fill="oklch(0.97 0.14 290)" fontSize="18" letterSpacing="1" fontWeight="600" fontFamily="ui-monospace, monospace">
+          94<tspan fontSize="11" fillOpacity="0.7">%</tspan>
+        </text>
+        <rect x="0" y="24" width="170" height="3" fill="oklch(0.3 0.05 290 / 0.6)" rx="1" />
+        <ProgressBar x={0} y={24} max={170} duration={5} animate={animate} />
 
-        <text x="194" y="0" fill="oklch(0.92 0.14 290)" fontSize="7" letterSpacing="2.5">
+        <text x="194" y="0" fill="oklch(0.92 0.14 290)" fillOpacity="0.6" fontSize="7" letterSpacing="2.5" fontFamily="ui-monospace, monospace">
           NOISE REDUCTION
         </text>
-        <rect x="194" y="4" width="170" height="4" fill="oklch(0.3 0.05 290 / 0.6)" rx="1" />
-        <ProgressBar x={194} y={4} max={170} duration={7} animate={animate} delay={0.6} />
+        <text x="194" y="18" fill="oklch(0.97 0.14 290)" fontSize="18" letterSpacing="1" fontWeight="600" fontFamily="ui-monospace, monospace">
+          98<tspan fontSize="11" fillOpacity="0.7">.2%</tspan>
+        </text>
+        <rect x="194" y="24" width="170" height="3" fill="oklch(0.3 0.05 290 / 0.6)" rx="1" />
+        <ProgressBar x={194} y={24} max={170} duration={7} animate={animate} delay={0.6} />
       </g>
 
-      {/* Coordinates / readouts row */}
-      <g transform="translate(118 548)" fill="oklch(0.85 0.1 280)" fontSize="8" letterSpacing="2">
+      {/* Tier 3 — secondary metadata, faint and small */}
+      <g transform="translate(118 568)" fill="oklch(0.85 0.1 280)" fillOpacity="0.5" fontSize="8" letterSpacing="3" fontFamily="ui-monospace, monospace">
         <text x="0" y="0">LAT 23°33'01"S</text>
-        <text x="120" y="0">LON 46°38'02"W</text>
-        <text x="240" y="0">FPS 60</text>
-        <text x="290" y="0">PASS {String(stage + 1).padStart(2, "0")}/05</text>
+        <text x="100" y="0">LON 46°38'02"W</text>
+        <text x="210" y="0">FPS 60</text>
+        <text x="270" y="0">PASS {String(stage + 1).padStart(2, "0")}/05</text>
       </g>
 
       {/* Pulsing marker line */}
@@ -374,24 +371,28 @@ function useWaveform(count: number, animate: boolean) {
   return heights;
 }
 
-function DataLabel({
+/**
+ * StatusTag — unified status indicator. Format: LABEL · VALUE
+ * monospace 10px, letter-spacing 0.08em, accent-purple separator dot.
+ */
+function StatusTag({
   position,
-  title,
+  label,
   value,
   live,
   dot,
 }: {
   position: "top-right" | "top-left" | "bottom-right" | "bottom-left";
-  title: string;
+  label: string;
   value: string;
   live?: boolean;
   dot?: boolean;
 }) {
   const pos = {
-    "top-right": "top-[14%] right-[-2%] items-start text-left",
-    "top-left": "top-[14%] left-[-2%] items-end text-right",
-    "bottom-right": "bottom-[14%] right-[-2%] items-start text-left",
-    "bottom-left": "bottom-[14%] left-[-2%] items-end text-right",
+    "top-right":    "top-[6%] right-[-2%] justify-end text-right",
+    "top-left":     "top-[6%] left-[-2%] justify-start text-left",
+    "bottom-right": "bottom-[2%] right-[-2%] justify-end text-right",
+    "bottom-left":  "bottom-[2%] left-[-2%] justify-start text-left",
   }[position];
 
   return (
@@ -399,28 +400,27 @@ function DataLabel({
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.2 }}
-      className={`absolute flex flex-col gap-0.5 ${pos}`}
+      className={`absolute flex items-center gap-1.5 font-mono text-[10px] tracking-[0.08em] ${pos}`}
+      style={{ letterSpacing: "0.08em" }}
     >
-      <span className="font-display text-[9px] tracking-[0.4em] text-foreground/45">
-        {title}
-      </span>
-      <span className="flex items-center gap-1.5 font-body text-[11px] tracking-[0.18em] text-foreground/85">
-        {dot && (
-          <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[oklch(0.85_0.16_290)] shadow-[0_0_8px_oklch(0.85_0.16_290)]" />
-        )}
-        {live ? (
-          <motion.span
-            key={value}
-            initial={{ opacity: 0, x: -4 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            {value}
-          </motion.span>
-        ) : (
-          value
-        )}
-      </span>
+      {dot && (
+        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[#7F77DD] shadow-[0_0_8px_#7F77DD]" />
+      )}
+      <span className="text-foreground/55">{label}</span>
+      <span className="text-[#7F77DD]">·</span>
+      {live ? (
+        <motion.span
+          key={value}
+          initial={{ opacity: 0, x: -4 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-foreground/90"
+        >
+          {value}
+        </motion.span>
+      ) : (
+        <span className="text-foreground/90">{value}</span>
+      )}
     </motion.div>
   );
 }
@@ -440,12 +440,12 @@ export function WireframeCar({ reduce, isMobile = false }: { reduce: boolean; is
   // Coordinates calibrated to the car hologram image (centered ~300,290,
   // ~440 wide × ~200 tall in the 600 viewBox).
   const parts = [
-    // x, y, w, h on viewBox; anchor path ends at label x,y
-    { x: 138, y: 222, w: 240, h: 50, label: "HOOD",       anchor: "M 258 222 L 258 188 L 320 188" },
-    { x: 270, y: 200, w: 200, h: 64, label: "GLASS",      anchor: "M 470 218 L 520 178 L 588 178" },
-    { x: 132, y: 280, w: 110, h: 110, label: "WHEEL",     anchor: "M 132 332 L 78 380 L 30 380" },
-    { x: 388, y: 280, w: 110, h: 110, label: "WHEEL  R",  anchor: "M 498 332 L 552 380 L 590 380" },
-    { x: 196, y: 240, w: 250, h: 36, label: "SURFACE",    anchor: "M 446 252 L 520 252 L 590 252" },
+    // anchor format: { ax, ay (point on car), tx, ty (label position) }
+    { x: 138, y: 222, w: 240, h: 50,  label: "HOOD",   sub: "Front Panel",         ax: 258, ay: 222, tx: 320, ty: 178 },
+    { x: 270, y: 200, w: 200, h: 64,  label: "GI",     sub: "Global Illumination", ax: 470, ay: 218, tx: 588, ty: 168 },
+    { x: 132, y: 280, w: 110, h: 110, label: "WHEEL",  sub: "Front Left",          ax: 156, ay: 360, tx: 30,  ty: 405 },
+    { x: 388, y: 280, w: 110, h: 110, label: "SI",     sub: "Surface Integrity",   ax: 470, ay: 360, tx: 590, ty: 405 },
+    { x: 196, y: 240, w: 250, h: 36,  label: "PAINT",  sub: "Reflectance",         ax: 320, ay: 250, tx: 590, ty: 252 },
   ];
 
   return (
@@ -488,8 +488,15 @@ export function WireframeCar({ reduce, isMobile = false }: { reduce: boolean; is
               strokeLinecap="round"
             />
           ))}
-          <path d={p.anchor} stroke={strokeSoft} strokeWidth="0.6" strokeOpacity="0.7" fill="none" />
-          <PartLabel anchor={p.anchor} label={p.label} />
+          <Annotation
+            ax={p.ax}
+            ay={p.ay}
+            tx={p.tx}
+            ty={p.ty}
+            label={p.label}
+            sub={p.sub}
+            stroke={strokeSoft}
+          />
         </motion.g>
       ))}
 
@@ -560,22 +567,83 @@ export function WireframeCar({ reduce, isMobile = false }: { reduce: boolean; is
   );
 }
 
-export function PartLabel({ anchor, label }: { anchor: string; label: string }) {
-  // Extract last "x y" pair from path
-  const tokens = anchor.trim().split(/\s+/);
-  const y = Number(tokens[tokens.length - 1]);
-  const x = Number(tokens[tokens.length - 2]);
+/**
+ * Annotation — blueprint-style leader: anchor dot on the car, dashed leader
+ * line with an elbow, short horizontal underline, then label + sublabel.
+ */
+function Annotation({
+  ax,
+  ay,
+  tx,
+  ty,
+  label,
+  sub,
+  stroke,
+}: {
+  ax: number;
+  ay: number;
+  tx: number;
+  ty: number;
+  label: string;
+  sub?: string;
+  stroke: string;
+}) {
+  const goingRight = tx > ax;
+  // Elbow midpoint creates a 2-segment leader
+  const ex = goingRight ? tx - 24 : tx + 24;
+  const underlineX1 = goingRight ? tx - 22 : tx + 22;
+  const underlineX2 = goingRight ? tx - 2 : tx + 2;
   return (
-    <text
-      x={x}
-      y={y - 6}
-      fill="oklch(0.92 0.14 290)"
-      fontSize="9"
-      letterSpacing="3"
-      fontFamily="ui-sans-serif, system-ui"
-    >
-      {label}
-    </text>
+    <g>
+      {/* Anchor dot on the car */}
+      <circle cx={ax} cy={ay} r="2.4" fill="oklch(0.92 0.18 290)" />
+      <circle cx={ax} cy={ay} r="4.2" fill="none" stroke={stroke} strokeWidth="0.5" strokeOpacity="0.5" />
+      {/* Dashed leader: car → elbow → label */}
+      <path
+        d={`M ${ax} ${ay} L ${ex} ${ty} L ${goingRight ? tx - 4 : tx + 4} ${ty}`}
+        stroke={stroke}
+        strokeWidth="0.5"
+        strokeOpacity="0.7"
+        strokeDasharray="2 2.5"
+        fill="none"
+      />
+      {/* Short solid underline below the label */}
+      <line
+        x1={underlineX1}
+        y1={ty + 3}
+        x2={underlineX2}
+        y2={ty + 3}
+        stroke="oklch(0.92 0.14 290)"
+        strokeWidth="0.7"
+        strokeOpacity="0.85"
+      />
+      {/* Label */}
+      <text
+        x={tx}
+        y={ty}
+        fill="oklch(0.92 0.14 290)"
+        fontSize="9"
+        letterSpacing="2.5"
+        textAnchor={goingRight ? "end" : "start"}
+        fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+      >
+        {label}
+      </text>
+      {sub && (
+        <text
+          x={tx}
+          y={ty + 12}
+          fill="oklch(0.92 0.14 290)"
+          fillOpacity="0.55"
+          fontSize="6.5"
+          letterSpacing="1.5"
+          textAnchor={goingRight ? "end" : "start"}
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+        >
+          {sub.toUpperCase()}
+        </text>
+      )}
+    </g>
   );
 }
 
@@ -608,72 +676,113 @@ function SidePanel({
   const stroke = "oklch(0.88 0.16 290)";
   const soft = "oklch(0.78 0.14 280)";
   const align = side === "left" ? "items-start text-left" : "items-end text-right";
-  // Rolling log lines
-  const logs = [
-    "› init.matrix(4096×2731)",
-    "› load.model aspect.v3",
-    "› analyze.surface ✓",
-    "› map.reflections 92%",
-    "› denoise.kernel ✓",
-    "› color.grade locked",
-    "› export.ready",
+
+  // Distinct data per side
+  const inputRows = [
+    { k: "SOURCE", v: "1920×1280" },
+    { k: "FORMAT", v: "JPEG · sRGB" },
+    { k: "NOISE",  v: "ISO 6400" },
+    { k: "FRAMES", v: "01 / 01" },
+    { k: "EXIF",   v: "f/2.8 · 1/60s" },
   ];
-  const visibleLogs = logs.slice(0, 4 + (stage % 3));
+  const outputRows = [
+    { k: "RENDER", v: "4096×2731" },
+    { k: "DENOISE", v: "98.2 %" },
+    { k: "PASS",   v: `${String(stage + 1).padStart(2, "0")} / 05` },
+    { k: "QUALITY", v: "MASTER" },
+    { k: "EXPORT", v: "PNG · 16-bit" },
+  ];
+  const rows = side === "left" ? inputRows : outputRows;
+  const header = side === "left" ? "NEURAL · INPUT" : "NEURAL · OUTPUT";
+  const gauges =
+    side === "left"
+      ? [{ k: "AI", v: 87, active: true }, { k: "GPU", v: 94 }, { k: "NET", v: 62 }]
+      : null;
 
   return (
-    <div className={`flex w-[230px] flex-col gap-4 ${align}`}>
+    <div className={`flex w-[240px] flex-col gap-4 ${align}`}>
       {/* Header */}
       <div className="flex w-full items-center gap-2">
-        <span className="font-display text-[9px] tracking-[0.4em] text-foreground/55">
-          {side === "left" ? "NEURAL · INPUT" : "NEURAL · OUTPUT"}
+        <span className="font-mono text-[10px] tracking-[0.08em] text-foreground/55">
+          {header.split(" · ")[0]}
+        </span>
+        <span className="text-[#7F77DD]">·</span>
+        <span className="font-mono text-[10px] tracking-[0.08em] text-foreground/90">
+          {header.split(" · ")[1]}
         </span>
         <span className="h-px flex-1 bg-foreground/15" />
       </div>
 
       {/* Mini neural net SVG */}
-      <svg viewBox="0 0 230 130" className="w-full">
+      <svg viewBox="0 0 230 110" className="w-full">
         <NeuralMini animate={animate} mirror={side === "right"} />
       </svg>
 
-      {/* Rolling data feed */}
-      <div className={`w-full font-mono text-[10px] leading-relaxed text-foreground/65 ${side === "right" ? "text-right" : ""}`}>
-        {visibleLogs.map((l, i) => (
+      {/* Distinct data rows: LABEL · VALUE */}
+      <div className="w-full font-mono text-[10px] leading-relaxed">
+        {rows.map((r) => (
           <div
-            key={l}
-            className="truncate"
-            style={{ opacity: 1 - i * 0.12 }}
+            key={r.k}
+            className={`flex items-center gap-2 ${side === "right" ? "justify-end" : "justify-start"}`}
+            style={{ letterSpacing: "0.08em" }}
           >
-            {l}
+            <span className="text-foreground/55">{r.k}</span>
+            <span className="text-[#7F77DD]">·</span>
+            <span className="text-foreground/90">{r.v}</span>
           </div>
         ))}
       </div>
 
-      {/* Mini gauges */}
-      <svg viewBox="0 0 230 60" className="w-full">
-        {[0, 1, 2].map((i) => (
-          <g key={i} transform={`translate(${i * 78} 12)`}>
-            <circle cx="22" cy="22" r="18" stroke={soft} strokeWidth="1" strokeOpacity="0.4" fill="none" />
-            <motion.circle
-              cx="22"
-              cy="22"
-              r="18"
-              stroke={stroke}
-              strokeWidth="2"
-              fill="none"
-              strokeLinecap="round"
-              pathLength={1}
-              strokeDasharray="1 1"
-              initial={{ strokeDashoffset: 1 }}
-              animate={animate ? { strokeDashoffset: [1, 0.25 + i * 0.15, 1] } : { strokeDashoffset: 0.4 }}
-              transition={animate ? { duration: 4 + i, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
-              transform="rotate(-90 22 22)"
-            />
-            <text x="22" y="26" fill="oklch(0.92 0.14 290)" fontSize="9" textAnchor="middle">
-              {["AI", "GPU", "NET"][i]}
-            </text>
-          </g>
-        ))}
-      </svg>
+      {/* Gauges only on left side (single set) */}
+      {gauges && (
+        <svg viewBox="0 0 230 60" className="w-full">
+          {gauges.map((g, i) => (
+            <g key={g.k} transform={`translate(${i * 78} 12)`}>
+              <circle cx="22" cy="22" r="18" stroke={soft} strokeWidth="1" strokeOpacity="0.4" fill="none" />
+              <motion.circle
+                cx="22"
+                cy="22"
+                r="18"
+                stroke={g.active ? "oklch(0.92 0.2 290)" : stroke}
+                strokeWidth={g.active ? 2.4 : 1.6}
+                fill="none"
+                strokeLinecap="round"
+                pathLength={1}
+                strokeDasharray={`${g.v / 100} 1`}
+                initial={{ strokeDashoffset: 0 }}
+                animate={animate ? { rotate: 0 } : undefined}
+                transform="rotate(-90 22 22)"
+                style={
+                  g.active
+                    ? { filter: "drop-shadow(0 0 4px oklch(0.92 0.2 290))" }
+                    : undefined
+                }
+              />
+              <text
+                x="22"
+                y="20"
+                fill="oklch(0.92 0.14 290)"
+                fontSize="7"
+                textAnchor="middle"
+                fontFamily="ui-monospace, monospace"
+              >
+                {g.k}
+              </text>
+              <text
+                x="22"
+                y="30"
+                fill="oklch(0.92 0.14 290)"
+                fillOpacity={g.active ? 1 : 0.7}
+                fontSize="8"
+                textAnchor="middle"
+                fontFamily="ui-monospace, monospace"
+              >
+                {g.v}%
+              </text>
+            </g>
+          ))}
+        </svg>
+      )}
     </div>
   );
 }
