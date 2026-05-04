@@ -178,26 +178,13 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
           {/* Telemetry block under the car — fills lower empty space */}
           <TelemetryBlock animate={animate} stage={stage} isMobile={isMobile} />
 
-          {/* Connector lines to data labels (top-right & bottom-left) */}
-          <g stroke="oklch(0.78 0.16 290)" strokeWidth="0.6" strokeOpacity="0.55">
-            <path d="M 470 170 L 520 130 L 590 130" />
-            <path d="M 130 430 L 80 470 L 10 470" />
-            <path d="M 470 430 L 520 470 L 590 470" />
-            <path d="M 130 170 L 80 130 L 10 130" />
-          </g>
-          <g fill="oklch(0.92 0.14 290)">
-            <circle cx="470" cy="170" r="2" />
-            <circle cx="130" cy="430" r="2" />
-            <circle cx="470" cy="430" r="2" />
-            <circle cx="130" cy="170" r="2" />
-          </g>
         </svg>
 
-        {/* Data labels (HTML, crisp text) */}
-        <DataLabel position="top-right" title="STATUS" value={STAGES[stage]} live />
-        <DataLabel position="bottom-right" title="OUTPUT" value="4096 × 2731" />
-        <DataLabel position="bottom-left" title="MODEL" value="ASPECT.v3" />
-        <DataLabel position="top-left" title="SYS" value="ONLINE" dot />
+        {/* Standardized status indicators — LABEL · VALUE monospace */}
+        <StatusTag position="top-left"     label="SYS"    value="ONLINE" dot />
+        <StatusTag position="top-right"    label="STATUS" value={STAGES[stage]} live />
+        <StatusTag position="bottom-left"  label="MODEL"  value="ASPECT.v3" />
+        <StatusTag position="bottom-right" label="OUTPUT" value="4096×2731" />
 
         {/* Center label below telemetry */}
         <div className="absolute left-1/2 top-[94%] -translate-x-1/2 text-center">
