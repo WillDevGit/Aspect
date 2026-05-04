@@ -115,16 +115,3 @@ export function ScrollHero() {
     </section>
   );
 }
-
-function InlineStat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="flex flex-col">
-      <span className="font-display text-4xl leading-none tracking-tight text-foreground md:text-5xl [text-shadow:0_2px_20px_rgba(0,0,0,0.7)]">
-        {value}
-      </span>
-      <span className="mt-2 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-        {label}
-      </span>
-    </div>
-  );
-}
