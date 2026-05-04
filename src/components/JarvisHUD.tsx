@@ -172,27 +172,6 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
           {/* Wireframe car blueprint (side profile) */}
           <WireframeCar reduce={!animate} isMobile={isMobile} />
 
-          {/* Radar sweep arc (rotating wedge) */}
-          {animate && (
-            <motion.g
-              style={{ transformOrigin: "300px 300px", willChange: "transform" }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 8, ease: "linear", repeat: Infinity }}
-            >
-              <defs>
-                <linearGradient id="radar-sweep" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="oklch(0.85 0.2 290)" stopOpacity="0" />
-                  <stop offset="100%" stopColor="oklch(0.92 0.2 290)" stopOpacity="0.55" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M 300 300 L 530 300 A 230 230 0 0 0 460 137 Z"
-                fill="url(#radar-sweep)"
-                opacity="0.7"
-              />
-            </motion.g>
-          )}
-
           {/* Telemetry block under the car — fills lower empty space */}
           <TelemetryBlock animate={animate} stage={stage} isMobile={isMobile} />
 
