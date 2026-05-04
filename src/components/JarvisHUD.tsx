@@ -58,6 +58,9 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
         }}
       />
 
+      {/* Side panels — fill empty horizontal space with neural / data readouts */}
+      {!isMobile && <SidePanels animate={animate} stage={stage} />}
+
       {/* HUD core */}
       <div className="relative aspect-square h-[min(78vmin,720px)] w-[min(78vmin,720px)]">
         {/* Car hologram (real wireframe car image) */}
@@ -171,27 +174,6 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
 
           {/* Wireframe car blueprint (side profile) */}
           <WireframeCar reduce={!animate} isMobile={isMobile} />
-
-          {/* Radar sweep arc (rotating wedge) */}
-          {animate && (
-            <motion.g
-              style={{ transformOrigin: "300px 300px", willChange: "transform" }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 8, ease: "linear", repeat: Infinity }}
-            >
-              <defs>
-                <linearGradient id="radar-sweep" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="oklch(0.85 0.2 290)" stopOpacity="0" />
-                  <stop offset="100%" stopColor="oklch(0.92 0.2 290)" stopOpacity="0.55" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M 300 300 L 530 300 A 230 230 0 0 0 460 137 Z"
-                fill="url(#radar-sweep)"
-                opacity="0.7"
-              />
-            </motion.g>
-          )}
 
           {/* Telemetry block under the car — fills lower empty space */}
           <TelemetryBlock animate={animate} stage={stage} isMobile={isMobile} />
@@ -594,5 +576,157 @@ export function PartLabel({ anchor, label }: { anchor: string; label: string }) 
     >
       {label}
     </text>
+  );
+}
+
+/**
+ * SidePanels — fills empty horizontal space on left/right of the HUD with
+ * mini neural-net visualizations and rolling data feeds (Jarvis style).
+ */
+function SidePanels({ animate, stage }: { animate: boolean; stage: number }) {
+  return (
+    <>
+      <div className="pointer-events-none absolute left-4 top-1/2 hidden -translate-y-1/2 lg:block">
+        <SidePanel side="left" animate={animate} stage={stage} />
+      </div>
+      <div className="pointer-events-none absolute right-4 top-1/2 hidden -translate-y-1/2 lg:block">
+        <SidePanel side="right" animate={animate} stage={stage} />
+      </div>
+    </>
+  );
+}
+
+function SidePanel({
+  side,
+  animate,
+  stage,
+}: {
+  side: "left" | "right";
+  animate: boolean;
+  stage: number;
+}) {
+  const stroke = "oklch(0.88 0.16 290)";
+  const soft = "oklch(0.78 0.14 280)";
+  const align = side === "left" ? "items-start text-left" : "items-end text-right";
+  // Rolling log lines
+  const logs = [
+    "› init.matrix(4096×2731)",
+    "› load.model aspect.v3",
+    "› analyze.surface ✓",
+    "› map.reflections 92%",
+    "› denoise.kernel ✓",
+    "› color.grade locked",
+    "› export.ready",
+  ];
+  const visibleLogs = logs.slice(0, 4 + (stage % 3));
+
+  return (
+    <div className={`flex w-[230px] flex-col gap-4 ${align}`}>
+      {/* Header */}
+      <div className="flex w-full items-center gap-2">
+        <span className="font-display text-[9px] tracking-[0.4em] text-foreground/55">
+          {side === "left" ? "NEURAL · INPUT" : "NEURAL · OUTPUT"}
+        </span>
+        <span className="h-px flex-1 bg-foreground/15" />
+      </div>
+
+      {/* Mini neural net SVG */}
+      <svg viewBox="0 0 230 130" className="w-full">
+        <NeuralMini animate={animate} mirror={side === "right"} />
+      </svg>
+
+      {/* Rolling data feed */}
+      <div className={`w-full font-mono text-[10px] leading-relaxed text-foreground/65 ${side === "right" ? "text-right" : ""}`}>
+        {visibleLogs.map((l, i) => (
+          <div
+            key={l}
+            className="truncate"
+            style={{ opacity: 1 - i * 0.12 }}
+          >
+            {l}
+          </div>
+        ))}
+      </div>
+
+      {/* Mini gauges */}
+      <svg viewBox="0 0 230 60" className="w-full">
+        {[0, 1, 2].map((i) => (
+          <g key={i} transform={`translate(${i * 78} 12)`}>
+            <circle cx="22" cy="22" r="18" stroke={soft} strokeWidth="1" strokeOpacity="0.4" fill="none" />
+            <motion.circle
+              cx="22"
+              cy="22"
+              r="18"
+              stroke={stroke}
+              strokeWidth="2"
+              fill="none"
+              strokeLinecap="round"
+              pathLength={1}
+              strokeDasharray="1 1"
+              initial={{ strokeDashoffset: 1 }}
+              animate={animate ? { strokeDashoffset: [1, 0.25 + i * 0.15, 1] } : { strokeDashoffset: 0.4 }}
+              transition={animate ? { duration: 4 + i, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
+              transform="rotate(-90 22 22)"
+            />
+            <text x="22" y="26" fill="oklch(0.92 0.14 290)" fontSize="9" textAnchor="middle">
+              {["AI", "GPU", "NET"][i]}
+            </text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+function NeuralMini({ animate, mirror }: { animate: boolean; mirror: boolean }) {
+  // 3-layer feedforward network: 4 → 5 → 3 nodes
+  const layers = [4, 5, 3];
+  const W = 230;
+  const H = 130;
+  const colX = layers.map((_, i) => 25 + i * ((W - 50) / (layers.length - 1)));
+  const nodes: { x: number; y: number; layer: number; idx: number }[] = [];
+  layers.forEach((count, li) => {
+    for (let i = 0; i < count; i++) {
+      const y = 15 + (i + 0.5) * ((H - 30) / count);
+      nodes.push({ x: mirror ? W - colX[li] : colX[li], y, layer: li, idx: i });
+    }
+  });
+  const edges: { a: typeof nodes[number]; b: typeof nodes[number]; key: string }[] = [];
+  for (let li = 0; li < layers.length - 1; li++) {
+    const aNodes = nodes.filter((n) => n.layer === li);
+    const bNodes = nodes.filter((n) => n.layer === li + 1);
+    aNodes.forEach((a) =>
+      bNodes.forEach((b) => edges.push({ a, b, key: `${a.layer}-${a.idx}-${b.idx}` })),
+    );
+  }
+  return (
+    <g>
+      {edges.map((e, i) => (
+        <motion.line
+          key={e.key}
+          x1={e.a.x}
+          y1={e.a.y}
+          x2={e.b.x}
+          y2={e.b.y}
+          stroke="oklch(0.78 0.16 290)"
+          strokeWidth="0.6"
+          initial={{ opacity: 0.2 }}
+          animate={animate ? { opacity: [0.15, 0.8, 0.15] } : { opacity: 0.4 }}
+          transition={animate ? { duration: 2.4, delay: (i % 7) * 0.18, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
+        />
+      ))}
+      {nodes.map((n, i) => (
+        <motion.circle
+          key={i}
+          cx={n.x}
+          cy={n.y}
+          r={2.6}
+          fill="oklch(0.92 0.18 290)"
+          initial={{ opacity: 0.6 }}
+          animate={animate ? { opacity: [0.5, 1, 0.5], r: [2.4, 3.4, 2.4] } : { opacity: 1 }}
+          transition={animate ? { duration: 2 + (i % 3) * 0.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.12 } : { duration: 0 }}
+        />
+      ))}
+    </g>
   );
 }
