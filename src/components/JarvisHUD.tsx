@@ -58,6 +58,9 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
         }}
       />
 
+      {/* Side panels — fill empty horizontal space with neural / data readouts */}
+      {!isMobile && <SidePanels animate={animate} stage={stage} />}
+
       {/* HUD core */}
       <div className="relative aspect-square h-[min(78vmin,720px)] w-[min(78vmin,720px)]">
         {/* Car hologram (real wireframe car image) */}
