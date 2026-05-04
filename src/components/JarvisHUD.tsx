@@ -12,6 +12,8 @@ const STAGES = [
   "Surface integrity: OK",
   "Paint quality: Low",
   "Enhancement ready",
+  "Reflection map: 92%",
+  "Color grade: locked",
 ];
 
 export function JarvisHUD({ className = "" }: { className?: string }) {
@@ -63,7 +65,7 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
           src={carHologram}
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 w-[82%] -translate-x-1/2 -translate-y-[58%] select-none"
+          className="pointer-events-none absolute left-1/2 top-1/2 w-[82%] -translate-x-1/2 -translate-y-[68%] select-none"
           style={{
             filter: "drop-shadow(0 0 30px oklch(0.78 0.22 290 / 0.55)) brightness(1.1) contrast(1.05)",
             maskImage: "radial-gradient(ellipse 60% 70% at 50% 50%, black 55%, transparent 100%)",
@@ -170,6 +172,30 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
           {/* Wireframe car blueprint (side profile) */}
           <WireframeCar reduce={!animate} isMobile={isMobile} />
 
+          {/* Radar sweep arc (rotating wedge) */}
+          {animate && (
+            <motion.g
+              style={{ transformOrigin: "300px 300px", willChange: "transform" }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 8, ease: "linear", repeat: Infinity }}
+            >
+              <defs>
+                <linearGradient id="radar-sweep" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="oklch(0.85 0.2 290)" stopOpacity="0" />
+                  <stop offset="100%" stopColor="oklch(0.92 0.2 290)" stopOpacity="0.55" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M 300 300 L 530 300 A 230 230 0 0 0 460 137 Z"
+                fill="url(#radar-sweep)"
+                opacity="0.7"
+              />
+            </motion.g>
+          )}
+
+          {/* Telemetry block under the car — fills lower empty space */}
+          <TelemetryBlock animate={animate} stage={stage} isMobile={isMobile} />
+
           {/* Connector lines to data labels (top-right & bottom-left) */}
           <g stroke="oklch(0.78 0.16 290)" strokeWidth="0.6" strokeOpacity="0.55">
             <path d="M 470 170 L 520 130 L 590 130" />
@@ -191,8 +217,8 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
         <DataLabel position="bottom-left" title="MODEL" value="ASPECT.v3" />
         <DataLabel position="top-left" title="SYS" value="ONLINE" dot />
 
-        {/* Center label below car */}
-        <div className="absolute left-1/2 top-[82%] -translate-x-1/2 text-center">
+        {/* Center label below telemetry */}
+        <div className="absolute left-1/2 top-[94%] -translate-x-1/2 text-center">
           <div className="font-display text-[10px] tracking-[0.5em] text-foreground/70">
             A · S · P · E · C · T
           </div>
@@ -203,6 +229,167 @@ export function JarvisHUD({ className = "" }: { className?: string }) {
       </div>
     </div>
   );
+}
+
+/**
+ * TelemetryBlock — animated SVG telemetry placed just below the car hologram
+ * to fill the empty lower hemisphere of the HUD. Includes:
+ *  - animated waveform / spectrum
+ *  - dual progress bars
+ *  - lat/long-style coordinate readout
+ *  - boot log lines that cycle
+ */
+function TelemetryBlock({
+  animate,
+  stage,
+  isMobile,
+}: {
+  animate: boolean;
+  stage: number;
+  isMobile: boolean;
+}) {
+  const stroke = "oklch(0.88 0.16 290)";
+  const strokeSoft = "oklch(0.78 0.14 280)";
+  // Spectrum bars
+  const bars = isMobile ? 24 : 40;
+  const barHeights = useWaveform(bars, animate);
+
+  return (
+    <g>
+      {/* Frame */}
+      <path
+        d="M 110 470 L 100 470 L 100 482"
+        stroke={stroke}
+        strokeWidth="0.9"
+        strokeOpacity="0.7"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M 490 470 L 500 470 L 500 482"
+        stroke={stroke}
+        strokeWidth="0.9"
+        strokeOpacity="0.7"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <line x1="110" y1="470" x2="490" y2="470" stroke={strokeSoft} strokeWidth="0.4" strokeOpacity="0.5" />
+
+      {/* Section label */}
+      <text x="120" y="464" fill="oklch(0.92 0.14 290)" fontSize="8" letterSpacing="3">
+        TELEMETRY · LIVE
+      </text>
+      <circle cx="115" cy="461" r="2" fill="oklch(0.92 0.18 290)">
+        {animate && <animate attributeName="opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite" />}
+      </circle>
+
+      {/* Spectrum / waveform */}
+      <g transform="translate(118 482)">
+        {barHeights.map((h, i) => {
+          const w = (364 / bars) - 1.2;
+          const x = i * (364 / bars);
+          return (
+            <rect
+              key={i}
+              x={x}
+              y={26 - h}
+              width={w}
+              height={h}
+              fill={i % 5 === 0 ? "oklch(0.92 0.2 290)" : strokeSoft}
+              opacity={0.55 + (h / 28) * 0.45}
+              rx="0.6"
+            />
+          );
+        })}
+        <line x1="0" y1="26" x2="364" y2="26" stroke={strokeSoft} strokeWidth="0.4" strokeOpacity="0.4" />
+      </g>
+
+      {/* Dual progress bars */}
+      <g transform="translate(118 522)">
+        <text x="0" y="0" fill="oklch(0.92 0.14 290)" fontSize="7" letterSpacing="2.5">
+          ENHANCEMENT
+        </text>
+        <rect x="0" y="4" width="170" height="4" fill="oklch(0.3 0.05 290 / 0.6)" rx="1" />
+        <ProgressBar x={0} y={4} max={170} duration={5} animate={animate} />
+
+        <text x="194" y="0" fill="oklch(0.92 0.14 290)" fontSize="7" letterSpacing="2.5">
+          NOISE REDUCTION
+        </text>
+        <rect x="194" y="4" width="170" height="4" fill="oklch(0.3 0.05 290 / 0.6)" rx="1" />
+        <ProgressBar x={194} y={4} max={170} duration={7} animate={animate} delay={0.6} />
+      </g>
+
+      {/* Coordinates / readouts row */}
+      <g transform="translate(118 548)" fill="oklch(0.85 0.1 280)" fontSize="8" letterSpacing="2">
+        <text x="0" y="0">LAT 23°33'01"S</text>
+        <text x="120" y="0">LON 46°38'02"W</text>
+        <text x="240" y="0">FPS 60</text>
+        <text x="290" y="0">PASS {String(stage + 1).padStart(2, "0")}/05</text>
+      </g>
+
+      {/* Pulsing marker line */}
+      {animate && !isMobile && (
+        <motion.line
+          x1="118"
+          y1="482"
+          x2="118"
+          y2="508"
+          stroke="oklch(0.97 0.18 290)"
+          strokeWidth="0.8"
+          animate={{ x1: [118, 482], x2: [118, 482] }}
+          transition={{ duration: 4, ease: "linear", repeat: Infinity }}
+        />
+      )}
+    </g>
+  );
+}
+
+function ProgressBar({
+  x,
+  y,
+  max,
+  duration,
+  delay = 0,
+  animate,
+}: {
+  x: number;
+  y: number;
+  max: number;
+  duration: number;
+  delay?: number;
+  animate: boolean;
+}) {
+  return (
+    <motion.rect
+      x={x}
+      y={y}
+      height={4}
+      fill="oklch(0.85 0.2 290)"
+      rx={1}
+      initial={{ width: 0 }}
+      animate={animate ? { width: [0, max, max * 0.65, max] } : { width: max * 0.7 }}
+      transition={animate ? { duration, delay, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
+    />
+  );
+}
+
+function useWaveform(count: number, animate: boolean) {
+  const [heights, setHeights] = useState<number[]>(() =>
+    Array.from({ length: count }, () => 4 + Math.random() * 18),
+  );
+  useEffect(() => {
+    if (!animate) return;
+    const id = setInterval(() => {
+      setHeights((prev) =>
+        prev.map((h) => {
+          const target = 4 + Math.random() * 22;
+          return h + (target - h) * 0.55;
+        }),
+      );
+    }, 110);
+    return () => clearInterval(id);
+  }, [animate, count]);
+  return heights;
 }
 
 function DataLabel({
