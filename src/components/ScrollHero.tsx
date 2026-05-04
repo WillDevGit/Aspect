@@ -39,13 +39,13 @@ export function ScrollHero() {
   return (
     <section
       ref={containerRef}
-      className="relative bg-black"
+      className="relative bg-transparent"
       style={{ height: reduce ? "100vh" : "160vh" }}
       aria-label="Hero"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Layer 1 — pure black base */}
-        <div className="absolute inset-0 bg-black" />
+        {/* Layer 1 — translucent base lets the neural net mesh show through */}
+        <div className="absolute inset-0 bg-black/55" />
 
         {/* Layer 2 — left-edge gradient for legibility */}
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.55)_25%,rgba(0,0,0,0.15)_45%,transparent_60%)]" />
