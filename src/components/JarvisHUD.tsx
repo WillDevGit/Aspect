@@ -567,22 +567,83 @@ export function WireframeCar({ reduce, isMobile = false }: { reduce: boolean; is
   );
 }
 
-export function PartLabel({ anchor, label }: { anchor: string; label: string }) {
-  // Extract last "x y" pair from path
-  const tokens = anchor.trim().split(/\s+/);
-  const y = Number(tokens[tokens.length - 1]);
-  const x = Number(tokens[tokens.length - 2]);
+/**
+ * Annotation — blueprint-style leader: anchor dot on the car, dashed leader
+ * line with an elbow, short horizontal underline, then label + sublabel.
+ */
+function Annotation({
+  ax,
+  ay,
+  tx,
+  ty,
+  label,
+  sub,
+  stroke,
+}: {
+  ax: number;
+  ay: number;
+  tx: number;
+  ty: number;
+  label: string;
+  sub?: string;
+  stroke: string;
+}) {
+  const goingRight = tx > ax;
+  // Elbow midpoint creates a 2-segment leader
+  const ex = goingRight ? tx - 24 : tx + 24;
+  const underlineX1 = goingRight ? tx - 22 : tx + 22;
+  const underlineX2 = goingRight ? tx - 2 : tx + 2;
   return (
-    <text
-      x={x}
-      y={y - 6}
-      fill="oklch(0.92 0.14 290)"
-      fontSize="9"
-      letterSpacing="3"
-      fontFamily="ui-sans-serif, system-ui"
-    >
-      {label}
-    </text>
+    <g>
+      {/* Anchor dot on the car */}
+      <circle cx={ax} cy={ay} r="2.4" fill="oklch(0.92 0.18 290)" />
+      <circle cx={ax} cy={ay} r="4.2" fill="none" stroke={stroke} strokeWidth="0.5" strokeOpacity="0.5" />
+      {/* Dashed leader: car → elbow → label */}
+      <path
+        d={`M ${ax} ${ay} L ${ex} ${ty} L ${goingRight ? tx - 4 : tx + 4} ${ty}`}
+        stroke={stroke}
+        strokeWidth="0.5"
+        strokeOpacity="0.7"
+        strokeDasharray="2 2.5"
+        fill="none"
+      />
+      {/* Short solid underline below the label */}
+      <line
+        x1={underlineX1}
+        y1={ty + 3}
+        x2={underlineX2}
+        y2={ty + 3}
+        stroke="oklch(0.92 0.14 290)"
+        strokeWidth="0.7"
+        strokeOpacity="0.85"
+      />
+      {/* Label */}
+      <text
+        x={tx}
+        y={ty}
+        fill="oklch(0.92 0.14 290)"
+        fontSize="9"
+        letterSpacing="2.5"
+        textAnchor={goingRight ? "end" : "start"}
+        fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+      >
+        {label}
+      </text>
+      {sub && (
+        <text
+          x={tx}
+          y={ty + 12}
+          fill="oklch(0.92 0.14 290)"
+          fillOpacity="0.55"
+          fontSize="6.5"
+          letterSpacing="1.5"
+          textAnchor={goingRight ? "end" : "start"}
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+        >
+          {sub.toUpperCase()}
+        </text>
+      )}
+    </g>
   );
 }
 
