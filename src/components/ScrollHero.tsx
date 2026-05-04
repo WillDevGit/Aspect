@@ -70,23 +70,25 @@ export function ScrollHero() {
           >
             <div className="mb-6">
               <span className="font-body text-xs font-medium uppercase tracking-[0.35em] text-ember-glow">
-                People buy with their eyes first.
+                Your competitors are already doing this.
               </span>
             </div>
 
             <h1 className="font-display text-[3.4rem] leading-[0.95] tracking-tight text-foreground sm:text-7xl md:text-[6rem] lg:text-[7rem] [text-shadow:0_2px_40px_rgba(0,0,0,0.8)]">
-              Make your car
+              First
               <br />
-              impossible to{" "}
+              impressions are
+              <br />
+              built{" "}
               <span className="font-editorial text-gradient-animated [filter:drop-shadow(0_0_32px_oklch(0.72_0.22_315_/_0.7))]">
-                ignore.
+                here.
               </span>
             </h1>
 
             <p className="mt-8 max-w-md text-base leading-relaxed text-muted-foreground md:text-lg">
-              We transform ordinary car photos into high-impact images that
-              grab attention and{" "}
-              <span className="text-ember-glow font-medium">sell faster</span>.
+              We transform ordinary vehicle photos into high-impact images
+              that grab attention—and{" "}
+              <span className="text-ember-glow font-medium">close the sale</span>.
             </p>
 
             <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
