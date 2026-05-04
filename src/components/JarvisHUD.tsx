@@ -700,7 +700,7 @@ function SidePanel({
       : null;
 
   return (
-    <div className={`flex w-[240px] flex-col gap-4 ${align}`}>
+    <div className={`flex w-[240px] flex-col gap-3 ${align}`}>
       {/* Header */}
       <div className="flex w-full items-center gap-2">
         <span className="font-mono text-[10px] tracking-[0.08em] text-foreground/55">
@@ -713,21 +713,16 @@ function SidePanel({
         <span className="h-px flex-1 bg-foreground/15" />
       </div>
 
-      {/* Mini neural net SVG */}
-      <svg viewBox="0 0 230 110" className="w-full">
-        <NeuralMini animate={animate} mirror={side === "right"} />
-      </svg>
-
-      {/* Distinct data rows: LABEL · VALUE */}
-      <div className="w-full font-mono text-[10px] leading-relaxed">
+      {/* Data rows: LABEL · VALUE — pure text, no diagram */}
+      <div className="w-full font-mono text-[11px] leading-[1.85]">
         {rows.map((r) => (
           <div
             key={r.k}
             className={`flex items-center gap-2 ${side === "right" ? "justify-end" : "justify-start"}`}
             style={{ letterSpacing: "0.08em" }}
           >
-            <span className="text-foreground/55">{r.k}</span>
-            <span className="text-[#7F77DD]">·</span>
+            <span className="text-[#7F77DD]">{r.k}</span>
+            <span className="text-[#7F77DD]/70">·</span>
             <span className="text-foreground/90">{r.v}</span>
           </div>
         ))}
