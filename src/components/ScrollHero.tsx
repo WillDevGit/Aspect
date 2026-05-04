@@ -40,7 +40,7 @@ export function ScrollHero() {
     <section
       ref={containerRef}
       className="relative bg-transparent"
-      style={{ height: reduce ? "100vh" : "160vh" }}
+      style={{ height: reduce ? "100vh" : "115vh" }}
       aria-label="Hero"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden">
