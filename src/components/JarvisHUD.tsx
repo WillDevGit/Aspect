@@ -440,12 +440,12 @@ export function WireframeCar({ reduce, isMobile = false }: { reduce: boolean; is
   // Coordinates calibrated to the car hologram image (centered ~300,290,
   // ~440 wide × ~200 tall in the 600 viewBox).
   const parts = [
-    // x, y, w, h on viewBox; anchor path ends at label x,y
-    { x: 138, y: 222, w: 240, h: 50, label: "HOOD",       anchor: "M 258 222 L 258 188 L 320 188" },
-    { x: 270, y: 200, w: 200, h: 64, label: "GLASS",      anchor: "M 470 218 L 520 178 L 588 178" },
-    { x: 132, y: 280, w: 110, h: 110, label: "WHEEL",     anchor: "M 132 332 L 78 380 L 30 380" },
-    { x: 388, y: 280, w: 110, h: 110, label: "WHEEL  R",  anchor: "M 498 332 L 552 380 L 590 380" },
-    { x: 196, y: 240, w: 250, h: 36, label: "SURFACE",    anchor: "M 446 252 L 520 252 L 590 252" },
+    // anchor format: { ax, ay (point on car), tx, ty (label position) }
+    { x: 138, y: 222, w: 240, h: 50,  label: "HOOD",   sub: "Front Panel",         ax: 258, ay: 222, tx: 320, ty: 178 },
+    { x: 270, y: 200, w: 200, h: 64,  label: "GI",     sub: "Global Illumination", ax: 470, ay: 218, tx: 588, ty: 168 },
+    { x: 132, y: 280, w: 110, h: 110, label: "WHEEL",  sub: "Front Left",          ax: 156, ay: 360, tx: 30,  ty: 405 },
+    { x: 388, y: 280, w: 110, h: 110, label: "SI",     sub: "Surface Integrity",   ax: 470, ay: 360, tx: 590, ty: 405 },
+    { x: 196, y: 240, w: 250, h: 36,  label: "PAINT",  sub: "Reflectance",         ax: 320, ay: 250, tx: 590, ty: 252 },
   ];
 
   return (
@@ -488,8 +488,15 @@ export function WireframeCar({ reduce, isMobile = false }: { reduce: boolean; is
               strokeLinecap="round"
             />
           ))}
-          <path d={p.anchor} stroke={strokeSoft} strokeWidth="0.6" strokeOpacity="0.7" fill="none" />
-          <PartLabel anchor={p.anchor} label={p.label} />
+          <Annotation
+            ax={p.ax}
+            ay={p.ay}
+            tx={p.tx}
+            ty={p.ty}
+            label={p.label}
+            sub={p.sub}
+            stroke={strokeSoft}
+          />
         </motion.g>
       ))}
 
