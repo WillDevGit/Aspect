@@ -361,24 +361,28 @@ function useWaveform(count: number, animate: boolean) {
   return heights;
 }
 
-function DataLabel({
+/**
+ * StatusTag — unified status indicator. Format: LABEL · VALUE
+ * monospace 10px, letter-spacing 0.08em, accent-purple separator dot.
+ */
+function StatusTag({
   position,
-  title,
+  label,
   value,
   live,
   dot,
 }: {
   position: "top-right" | "top-left" | "bottom-right" | "bottom-left";
-  title: string;
+  label: string;
   value: string;
   live?: boolean;
   dot?: boolean;
 }) {
   const pos = {
-    "top-right": "top-[14%] right-[-2%] items-start text-left",
-    "top-left": "top-[14%] left-[-2%] items-end text-right",
-    "bottom-right": "bottom-[14%] right-[-2%] items-start text-left",
-    "bottom-left": "bottom-[14%] left-[-2%] items-end text-right",
+    "top-right":    "top-[6%] right-[-2%] justify-end text-right",
+    "top-left":     "top-[6%] left-[-2%] justify-start text-left",
+    "bottom-right": "bottom-[2%] right-[-2%] justify-end text-right",
+    "bottom-left":  "bottom-[2%] left-[-2%] justify-start text-left",
   }[position];
 
   return (
@@ -386,28 +390,27 @@ function DataLabel({
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.2 }}
-      className={`absolute flex flex-col gap-0.5 ${pos}`}
+      className={`absolute flex items-center gap-1.5 font-mono text-[10px] tracking-[0.08em] ${pos}`}
+      style={{ letterSpacing: "0.08em" }}
     >
-      <span className="font-display text-[9px] tracking-[0.4em] text-foreground/45">
-        {title}
-      </span>
-      <span className="flex items-center gap-1.5 font-body text-[11px] tracking-[0.18em] text-foreground/85">
-        {dot && (
-          <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[oklch(0.85_0.16_290)] shadow-[0_0_8px_oklch(0.85_0.16_290)]" />
-        )}
-        {live ? (
-          <motion.span
-            key={value}
-            initial={{ opacity: 0, x: -4 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            {value}
-          </motion.span>
-        ) : (
-          value
-        )}
-      </span>
+      {dot && (
+        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[#7F77DD] shadow-[0_0_8px_#7F77DD]" />
+      )}
+      <span className="text-foreground/55">{label}</span>
+      <span className="text-[#7F77DD]">·</span>
+      {live ? (
+        <motion.span
+          key={value}
+          initial={{ opacity: 0, x: -4 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-foreground/90"
+        >
+          {value}
+        </motion.span>
+      ) : (
+        <span className="text-foreground/90">{value}</span>
+      )}
     </motion.div>
   );
 }
