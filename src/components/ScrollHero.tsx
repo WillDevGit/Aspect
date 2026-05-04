@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { JarvisHUD } from "@/components/JarvisHUD";
+import { HeroHeadline } from "@/components/HeroHeadline";
 
 /**
  * Scroll-driven cinematic hero.
@@ -56,27 +57,10 @@ export function ScrollHero() {
 
         {/* Foreground — centered editorial headline above the car */}
         <motion.div
-          className="pointer-events-none relative z-20 mx-auto flex w-full max-w-4xl flex-col items-center px-6 pt-28 text-center md:pt-32"
+          className="pointer-events-none relative z-20 mx-auto flex w-full flex-col items-center pt-28 text-center md:pt-32"
           style={p ? { opacity: headlineOpacity, y: headlineY } : undefined}
         >
-          <h1
-            className="font-display font-bold text-foreground"
-            style={{
-              fontSize: "clamp(34px, 6vw, 64px)",
-              lineHeight: 1.04,
-              letterSpacing: "-0.02em",
-              textShadow: "0 2px 40px rgba(0,0,0,0.85)",
-            }}
-          >
-            Your competitors are already doing this.
-          </h1>
-          <p
-            className="mt-5 max-w-2xl text-foreground/60"
-            style={{ fontSize: "16px", lineHeight: 1.5 }}
-          >
-            AI-powered visual intelligence for brands that can't afford to fall behind.
-          </p>
-          <div className="h-12" aria-hidden />
+          <HeroHeadline />
         </motion.div>
 
         {/* Scroll hint */}
