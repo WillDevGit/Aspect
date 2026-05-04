@@ -666,72 +666,113 @@ function SidePanel({
   const stroke = "oklch(0.88 0.16 290)";
   const soft = "oklch(0.78 0.14 280)";
   const align = side === "left" ? "items-start text-left" : "items-end text-right";
-  // Rolling log lines
-  const logs = [
-    "› init.matrix(4096×2731)",
-    "› load.model aspect.v3",
-    "› analyze.surface ✓",
-    "› map.reflections 92%",
-    "› denoise.kernel ✓",
-    "› color.grade locked",
-    "› export.ready",
+
+  // Distinct data per side
+  const inputRows = [
+    { k: "SOURCE", v: "1920×1280" },
+    { k: "FORMAT", v: "JPEG · sRGB" },
+    { k: "NOISE",  v: "ISO 6400" },
+    { k: "FRAMES", v: "01 / 01" },
+    { k: "EXIF",   v: "f/2.8 · 1/60s" },
   ];
-  const visibleLogs = logs.slice(0, 4 + (stage % 3));
+  const outputRows = [
+    { k: "RENDER", v: "4096×2731" },
+    { k: "DENOISE", v: "98.2 %" },
+    { k: "PASS",   v: `${String(stage + 1).padStart(2, "0")} / 05` },
+    { k: "QUALITY", v: "MASTER" },
+    { k: "EXPORT", v: "PNG · 16-bit" },
+  ];
+  const rows = side === "left" ? inputRows : outputRows;
+  const header = side === "left" ? "NEURAL · INPUT" : "NEURAL · OUTPUT";
+  const gauges =
+    side === "left"
+      ? [{ k: "AI", v: 87, active: true }, { k: "GPU", v: 94 }, { k: "NET", v: 62 }]
+      : null;
 
   return (
-    <div className={`flex w-[230px] flex-col gap-4 ${align}`}>
+    <div className={`flex w-[240px] flex-col gap-4 ${align}`}>
       {/* Header */}
       <div className="flex w-full items-center gap-2">
-        <span className="font-display text-[9px] tracking-[0.4em] text-foreground/55">
-          {side === "left" ? "NEURAL · INPUT" : "NEURAL · OUTPUT"}
+        <span className="font-mono text-[10px] tracking-[0.08em] text-foreground/55">
+          {header.split(" · ")[0]}
+        </span>
+        <span className="text-[#7F77DD]">·</span>
+        <span className="font-mono text-[10px] tracking-[0.08em] text-foreground/90">
+          {header.split(" · ")[1]}
         </span>
         <span className="h-px flex-1 bg-foreground/15" />
       </div>
 
       {/* Mini neural net SVG */}
-      <svg viewBox="0 0 230 130" className="w-full">
+      <svg viewBox="0 0 230 110" className="w-full">
         <NeuralMini animate={animate} mirror={side === "right"} />
       </svg>
 
-      {/* Rolling data feed */}
-      <div className={`w-full font-mono text-[10px] leading-relaxed text-foreground/65 ${side === "right" ? "text-right" : ""}`}>
-        {visibleLogs.map((l, i) => (
+      {/* Distinct data rows: LABEL · VALUE */}
+      <div className="w-full font-mono text-[10px] leading-relaxed">
+        {rows.map((r) => (
           <div
-            key={l}
-            className="truncate"
-            style={{ opacity: 1 - i * 0.12 }}
+            key={r.k}
+            className={`flex items-center gap-2 ${side === "right" ? "justify-end" : "justify-start"}`}
+            style={{ letterSpacing: "0.08em" }}
           >
-            {l}
+            <span className="text-foreground/55">{r.k}</span>
+            <span className="text-[#7F77DD]">·</span>
+            <span className="text-foreground/90">{r.v}</span>
           </div>
         ))}
       </div>
 
-      {/* Mini gauges */}
-      <svg viewBox="0 0 230 60" className="w-full">
-        {[0, 1, 2].map((i) => (
-          <g key={i} transform={`translate(${i * 78} 12)`}>
-            <circle cx="22" cy="22" r="18" stroke={soft} strokeWidth="1" strokeOpacity="0.4" fill="none" />
-            <motion.circle
-              cx="22"
-              cy="22"
-              r="18"
-              stroke={stroke}
-              strokeWidth="2"
-              fill="none"
-              strokeLinecap="round"
-              pathLength={1}
-              strokeDasharray="1 1"
-              initial={{ strokeDashoffset: 1 }}
-              animate={animate ? { strokeDashoffset: [1, 0.25 + i * 0.15, 1] } : { strokeDashoffset: 0.4 }}
-              transition={animate ? { duration: 4 + i, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
-              transform="rotate(-90 22 22)"
-            />
-            <text x="22" y="26" fill="oklch(0.92 0.14 290)" fontSize="9" textAnchor="middle">
-              {["AI", "GPU", "NET"][i]}
-            </text>
-          </g>
-        ))}
-      </svg>
+      {/* Gauges only on left side (single set) */}
+      {gauges && (
+        <svg viewBox="0 0 230 60" className="w-full">
+          {gauges.map((g, i) => (
+            <g key={g.k} transform={`translate(${i * 78} 12)`}>
+              <circle cx="22" cy="22" r="18" stroke={soft} strokeWidth="1" strokeOpacity="0.4" fill="none" />
+              <motion.circle
+                cx="22"
+                cy="22"
+                r="18"
+                stroke={g.active ? "oklch(0.92 0.2 290)" : stroke}
+                strokeWidth={g.active ? 2.4 : 1.6}
+                fill="none"
+                strokeLinecap="round"
+                pathLength={1}
+                strokeDasharray={`${g.v / 100} 1`}
+                initial={{ strokeDashoffset: 0 }}
+                animate={animate ? { rotate: 0 } : undefined}
+                transform="rotate(-90 22 22)"
+                style={
+                  g.active
+                    ? { filter: "drop-shadow(0 0 4px oklch(0.92 0.2 290))" }
+                    : undefined
+                }
+              />
+              <text
+                x="22"
+                y="20"
+                fill="oklch(0.92 0.14 290)"
+                fontSize="7"
+                textAnchor="middle"
+                fontFamily="ui-monospace, monospace"
+              >
+                {g.k}
+              </text>
+              <text
+                x="22"
+                y="30"
+                fill="oklch(0.92 0.14 290)"
+                fillOpacity={g.active ? 1 : 0.7}
+                fontSize="8"
+                textAnchor="middle"
+                fontFamily="ui-monospace, monospace"
+              >
+                {g.v}%
+              </text>
+            </g>
+          ))}
+        </svg>
+      )}
     </div>
   );
 }
