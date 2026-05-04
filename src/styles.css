@@ -392,6 +392,16 @@
   100% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
 }
 
+@keyframes cursor-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cursor-pulse {
+  0% { transform-origin: center; r: 4; opacity: 0.8; }
+  100% { r: 12; opacity: 0; }
+}
+
 .cursor-trail-dot {
   position: absolute;
   width: 6px;
