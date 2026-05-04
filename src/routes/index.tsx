@@ -9,6 +9,7 @@ import { ScrollHero } from "@/components/ScrollHero";
 import { Viewer360 } from "@/components/Viewer360";
 import { DriveItCTA } from "@/components/DriveItCTA";
 import { CrosshairCursor } from "@/components/CrosshairCursor";
+import { NeuralBackground } from "@/components/NeuralBackground";
 import heroBg from "@/assets/hero-bg.jpg";
 
 export const Route = createFileRoute("/")({
@@ -37,6 +38,7 @@ function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <CrosshairCursor />
+      <NeuralBackground />
       <Header />
       <ScrollHero />
       <TrustBar />
