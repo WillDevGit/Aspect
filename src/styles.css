@@ -482,3 +482,56 @@
     animation: none !important;
   }
 }
+
+/* === Hero headline animations === */
+@keyframes hero-word-in {
+  0% { opacity: 0; transform: translateY(28px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-fadeup-in {
+  0% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-shimmer {
+  0% { background-position: 100% 0; }
+  50% { background-position: 0% 0; }
+  100% { background-position: 100% 0; }
+}
+@keyframes hero-scanline {
+  0% { top: -2px; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.hero-word {
+  display: inline-block;
+  opacity: 0;
+  margin-right: 0.28em;
+  will-change: transform, opacity;
+  animation: hero-word-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-fadeup {
+  opacity: 0;
+  animation: hero-fadeup-in 0.65s ease forwards;
+}
+.hero-shimmer {
+  display: inline-block;
+  background: linear-gradient(95deg, #C084FC 0%, #F472B6 40%, #FB923C 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: hero-shimmer 3.5s ease-in-out infinite;
+  animation-delay: 1.6s;
+}
+.hero-scanline {
+  background: linear-gradient(90deg, transparent, rgba(127,119,221,0.35), transparent);
+  animation: hero-scanline 4s linear infinite;
+  animation-delay: 1.2s;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-word, .hero-fadeup { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .hero-shimmer, .hero-scanline { animation: none !important; }
+}
