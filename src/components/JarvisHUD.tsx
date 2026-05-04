@@ -700,7 +700,7 @@ function SidePanel({
       : null;
 
   return (
-    <div className={`flex w-[240px] flex-col gap-4 ${align}`}>
+    <div className={`flex w-[240px] flex-col gap-3 ${align}`}>
       {/* Header */}
       <div className="flex w-full items-center gap-2">
         <span className="font-mono text-[10px] tracking-[0.08em] text-foreground/55">
@@ -713,21 +713,16 @@ function SidePanel({
         <span className="h-px flex-1 bg-foreground/15" />
       </div>
 
-      {/* Mini neural net SVG */}
-      <svg viewBox="0 0 230 110" className="w-full">
-        <NeuralMini animate={animate} mirror={side === "right"} />
-      </svg>
-
-      {/* Distinct data rows: LABEL · VALUE */}
-      <div className="w-full font-mono text-[10px] leading-relaxed">
+      {/* Data rows: LABEL · VALUE — pure text, no diagram */}
+      <div className="w-full font-mono text-[11px] leading-[1.85]">
         {rows.map((r) => (
           <div
             key={r.k}
             className={`flex items-center gap-2 ${side === "right" ? "justify-end" : "justify-start"}`}
             style={{ letterSpacing: "0.08em" }}
           >
-            <span className="text-foreground/55">{r.k}</span>
-            <span className="text-[#7F77DD]">·</span>
+            <span className="text-[#7F77DD]">{r.k}</span>
+            <span className="text-[#7F77DD]/70">·</span>
             <span className="text-foreground/90">{r.v}</span>
           </div>
         ))}
@@ -787,55 +782,3 @@ function SidePanel({
   );
 }
 
-function NeuralMini({ animate, mirror }: { animate: boolean; mirror: boolean }) {
-  // 3-layer feedforward network: 4 → 5 → 3 nodes
-  const layers = [4, 5, 3];
-  const W = 230;
-  const H = 130;
-  const colX = layers.map((_, i) => 25 + i * ((W - 50) / (layers.length - 1)));
-  const nodes: { x: number; y: number; layer: number; idx: number }[] = [];
-  layers.forEach((count, li) => {
-    for (let i = 0; i < count; i++) {
-      const y = 15 + (i + 0.5) * ((H - 30) / count);
-      nodes.push({ x: mirror ? W - colX[li] : colX[li], y, layer: li, idx: i });
-    }
-  });
-  const edges: { a: typeof nodes[number]; b: typeof nodes[number]; key: string }[] = [];
-  for (let li = 0; li < layers.length - 1; li++) {
-    const aNodes = nodes.filter((n) => n.layer === li);
-    const bNodes = nodes.filter((n) => n.layer === li + 1);
-    aNodes.forEach((a) =>
-      bNodes.forEach((b) => edges.push({ a, b, key: `${a.layer}-${a.idx}-${b.idx}` })),
-    );
-  }
-  return (
-    <g>
-      {edges.map((e, i) => (
-        <motion.line
-          key={e.key}
-          x1={e.a.x}
-          y1={e.a.y}
-          x2={e.b.x}
-          y2={e.b.y}
-          stroke="oklch(0.78 0.16 290)"
-          strokeWidth="0.6"
-          initial={{ opacity: 0.2 }}
-          animate={animate ? { opacity: [0.15, 0.8, 0.15] } : { opacity: 0.4 }}
-          transition={animate ? { duration: 2.4, delay: (i % 7) * 0.18, repeat: Infinity, ease: "easeInOut" } : { duration: 0 }}
-        />
-      ))}
-      {nodes.map((n, i) => (
-        <motion.circle
-          key={i}
-          cx={n.x}
-          cy={n.y}
-          r={2.6}
-          fill="oklch(0.92 0.18 290)"
-          initial={{ opacity: 0.6 }}
-          animate={animate ? { opacity: [0.5, 1, 0.5], r: [2.4, 3.4, 2.4] } : { opacity: 1 }}
-          transition={animate ? { duration: 2 + (i % 3) * 0.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.12 } : { duration: 0 }}
-        />
-      ))}
-    </g>
-  );
-}
