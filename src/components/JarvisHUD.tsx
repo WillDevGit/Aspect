@@ -244,11 +244,15 @@ function TelemetryBlock({
       />
       <line x1="110" y1="470" x2="490" y2="470" stroke={strokeSoft} strokeWidth="0.4" strokeOpacity="0.5" />
 
-      {/* Section label */}
-      <text x="120" y="464" fill="oklch(0.92 0.14 290)" fontSize="8" letterSpacing="3">
-        TELEMETRY · LIVE
+      {/* Tier 1 — section title */}
+      <text x="120" y="464" fill="oklch(0.92 0.14 290)" fontSize="9" letterSpacing="3" fontFamily="ui-monospace, monospace">
+        TELEMETRY
       </text>
-      <circle cx="115" cy="461" r="2" fill="oklch(0.92 0.18 290)">
+      <text x="172" y="464" fill="#7F77DD" fontSize="9" letterSpacing="3">·</text>
+      <text x="180" y="464" fill="oklch(0.92 0.14 290)" fontSize="9" letterSpacing="3" fontFamily="ui-monospace, monospace">
+        LIVE
+      </text>
+      <circle cx="115" cy="461" r="2" fill="#7F77DD">
         {animate && <animate attributeName="opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite" />}
       </circle>
 
@@ -273,27 +277,33 @@ function TelemetryBlock({
         <line x1="0" y1="26" x2="364" y2="26" stroke={strokeSoft} strokeWidth="0.4" strokeOpacity="0.4" />
       </g>
 
-      {/* Dual progress bars */}
+      {/* Tier 2 — highlighted metrics with large numeric values */}
       <g transform="translate(118 522)">
-        <text x="0" y="0" fill="oklch(0.92 0.14 290)" fontSize="7" letterSpacing="2.5">
+        <text x="0" y="0" fill="oklch(0.92 0.14 290)" fillOpacity="0.6" fontSize="7" letterSpacing="2.5" fontFamily="ui-monospace, monospace">
           ENHANCEMENT
         </text>
-        <rect x="0" y="4" width="170" height="4" fill="oklch(0.3 0.05 290 / 0.6)" rx="1" />
-        <ProgressBar x={0} y={4} max={170} duration={5} animate={animate} />
+        <text x="0" y="18" fill="oklch(0.97 0.14 290)" fontSize="18" letterSpacing="1" fontWeight="600" fontFamily="ui-monospace, monospace">
+          94<tspan fontSize="11" fillOpacity="0.7">%</tspan>
+        </text>
+        <rect x="0" y="24" width="170" height="3" fill="oklch(0.3 0.05 290 / 0.6)" rx="1" />
+        <ProgressBar x={0} y={24} max={170} duration={5} animate={animate} />
 
-        <text x="194" y="0" fill="oklch(0.92 0.14 290)" fontSize="7" letterSpacing="2.5">
+        <text x="194" y="0" fill="oklch(0.92 0.14 290)" fillOpacity="0.6" fontSize="7" letterSpacing="2.5" fontFamily="ui-monospace, monospace">
           NOISE REDUCTION
         </text>
-        <rect x="194" y="4" width="170" height="4" fill="oklch(0.3 0.05 290 / 0.6)" rx="1" />
-        <ProgressBar x={194} y={4} max={170} duration={7} animate={animate} delay={0.6} />
+        <text x="194" y="18" fill="oklch(0.97 0.14 290)" fontSize="18" letterSpacing="1" fontWeight="600" fontFamily="ui-monospace, monospace">
+          98<tspan fontSize="11" fillOpacity="0.7">.2%</tspan>
+        </text>
+        <rect x="194" y="24" width="170" height="3" fill="oklch(0.3 0.05 290 / 0.6)" rx="1" />
+        <ProgressBar x={194} y={24} max={170} duration={7} animate={animate} delay={0.6} />
       </g>
 
-      {/* Coordinates / readouts row */}
-      <g transform="translate(118 548)" fill="oklch(0.85 0.1 280)" fontSize="8" letterSpacing="2">
+      {/* Tier 3 — secondary metadata, faint and small */}
+      <g transform="translate(118 568)" fill="oklch(0.85 0.1 280)" fillOpacity="0.5" fontSize="8" letterSpacing="3" fontFamily="ui-monospace, monospace">
         <text x="0" y="0">LAT 23°33'01"S</text>
-        <text x="120" y="0">LON 46°38'02"W</text>
-        <text x="240" y="0">FPS 60</text>
-        <text x="290" y="0">PASS {String(stage + 1).padStart(2, "0")}/05</text>
+        <text x="100" y="0">LON 46°38'02"W</text>
+        <text x="210" y="0">FPS 60</text>
+        <text x="270" y="0">PASS {String(stage + 1).padStart(2, "0")}/05</text>
       </g>
 
       {/* Pulsing marker line */}
